@@ -25,5 +25,23 @@ exports.validator = Joi.object({
     phoneNumber: Joi.string()
         .regex(/^\d{3}-\d{3}-\d{4}$/)
         .required(),
+    currentlocation: Joi.object().keys({
+        type: Joi.string()
+            .required()
+            .valid(["Point"]),
+        coordinates: Joi.array().ordered([
+            Joi.number()
+                .min(-180)
+                .max(180)
+                .required(),
+            Joi.number()
+                .min(-90)
+                .max(90)
+                .required()
+        ])
+    
+        .description("Please use this format [ longitude, latitude]")
+
+    })
 
 })
