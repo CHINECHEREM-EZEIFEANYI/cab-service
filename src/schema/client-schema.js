@@ -31,12 +31,12 @@ exports.validator = Joi.object({
             .valid(["Point"]),
         coordinates: Joi.array().ordered([
             Joi.number()
-                .min(-180)
-                .max(180)
+                .min(7.24)
+                .max(7.46)
                 .required(),
             Joi.number()
-                .min(-90)
-                .max(90)
+                .min(6.7)
+                .max(6.9)
                 .required()
         ])
     
