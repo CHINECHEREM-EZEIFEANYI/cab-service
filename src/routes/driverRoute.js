@@ -1,6 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-
+const {authUser, authRole } = require('.../basicAuth')
 const app = express();
 app.use(bodyParser.json());
 
@@ -10,6 +10,16 @@ let drivers = [
     { id: 2, name: 'Jane Smith', available: false },
     { id: 3, name: 'Michael Johnson', available: true }
 ];
+router.get("/", function (req, res) {
+    res.render('index')
+});
+
+router.get("/signIn", function (req, res) {
+    res.render('signup')
+});
+router.get("/login", function (req, res) {
+    res.render('login')
+});
 
 // Get all drivers
 route.get('/drivers', (req, res) => {
@@ -17,7 +27,7 @@ route.get('/drivers', (req, res) => {
 });
 
 // Get a single driver by ID
-route.get('/drivers/:id', (req, res) => {
+route.get('/drivers/:id', authUser, (req, res) => {
     const driverId = parseInt(req.params.id);
     const driver = drivers.find(driver => driver.id === driverId);
 
@@ -29,7 +39,7 @@ route.get('/drivers/:id', (req, res) => {
 });
 
 // Create a new driver
-route.post('/drivers', (req, res) => {
+route.post('/drivers', authUser, (req, res) => {
     const { id, name } = req.body;
     const newDriver = { id, name, available: true };
     drivers.push(newDriver);
@@ -38,7 +48,7 @@ route.post('/drivers', (req, res) => {
 });
 
 // Update a driver's availability
-route.put('/drivers/:id', (req, res) => {
+route.put('/drivers/:id', authUser, (req, res) => {
     const driverId = parseInt(req.params.id);
     const driver = drivers.find(driver => driver.id === driverId);
 
@@ -51,7 +61,7 @@ route.put('/drivers/:id', (req, res) => {
 });
 
 // Delete a driver
-route.delete('/drivers/:id', (req, res) => {
+route.delete('/drivers/:id', authRole, (req, res) => {
     const driverId = parseInt(req.params.id);
     const index = drivers.findIndex(driver => driver.id === driverId);
 
