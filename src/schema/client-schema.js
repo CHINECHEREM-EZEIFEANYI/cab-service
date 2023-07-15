@@ -42,6 +42,49 @@ exports.validator = Joi.object({
     
         .description("Please use this format [ longitude, latitude]")
 
-    })
+    }), 
+    dateCreated: Joi.date()
+        .integer()
+        .min(2023)
+        .max(2099),
+    updateDate: Joi.date()
+        .integer()
+        .min(2023)
+        .max(2099)
 
 })
+const userSchema = new mongoose.Schema({
+    id: String,
+    FirstName: String,
+    LastName: String,
+    email: String,
+    phoneNumber: Number,
+    currentlocation: Object,
+    dateCreated: Date,
+    updateDate: Date
+});
+
+exports.userModel = mongoose.model('client', userSchema);
+let data = {
+    id,
+    FirstName,
+    UserName,
+    email,
+    phoneNumber,
+    currentlocation,
+    dateCreated,
+    updateDate
+}
+
+
+Joi.validate(data, validator, (err, value) => {
+
+    if (err) {
+
+        console.log(err.details);
+
+    } else {
+
+        console.log(value);
+    }
+});

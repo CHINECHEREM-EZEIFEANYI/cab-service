@@ -51,9 +51,29 @@ exports.validator = Joi.object.keys({
             .alphanum()
             .min(8)
             .max(9)
-            .required()
+            .required(),
 
-    })
+    }),
+    availability: Joi.boolean()
+        .required(),
+    rating: Joi.object().keys({
+        average: Joi.number()
+            .required(),
+        total: Joi.number()
+            .required(),
+        count: Joi.number()
+            .required(),
+        
+    }),
+    dateCreated: Joi.date()
+        .integer()
+        .min(2023)
+        .max(2099),
+    updateDate: Joi.date()
+        .integer()
+        .min(2023)
+        .max(2099)
+
 
 
 
@@ -67,7 +87,11 @@ const userSchema = new mongoose.Schema({
     age: Date,
     profilePhoto: Image,
     bio: String,
-    car: Object
+    car: Object,
+    availability: Boolean,
+    rating: Object,
+    dateCreated: Date,
+    updateDate: Date
 });
 
 exports.userModel = mongoose.model('driver', userSchema);
@@ -80,7 +104,11 @@ let data = {
     age,
     profilePhoto,
     bio,
-    car
+    car, 
+    availability,
+    rating,
+    dateCreated,
+    updateDate
 }
 
 
