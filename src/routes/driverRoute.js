@@ -1,6 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const {authUser, authRole } = require('.../basicAuth')
+const { authUser, authRole } = require('.../basicAuth')
+const {router} = require ('./clientRoute')
 const app = express();
 app.use(bodyParser.json());
 
@@ -25,7 +26,9 @@ router.get("/login", function (req, res) {
 route.get('/drivers', (req, res) => {
     res.json(drivers);
 });
-
+router.get("/driver/dashboard", authUser, function (req, res) {
+    res.render('studentdashboard', { user: req.user.name })
+})
 // Get a single driver by ID
 route.get('/drivers/:id', authUser, (req, res) => {
     const driverId = parseInt(req.params.id);
@@ -74,3 +77,31 @@ route.delete('/drivers/:id', authRole, (req, res) => {
 });
 
 
+router.post(
+    "/login",
+    passport.authenticate("local", {
+        failureRedirect: "/login",
+        failureFlash: true,
+    }), (req, res) => {
+        if (req.user.role === 'Driver') {
+            res.redirect("/driver/dashboard");
+        }
+        else {
+            res.redirect("/booking/dashboard");
+        }
+    }
+);
+
+
+//In passport new update 'logout' is now an asynchronous function and requires a callback
+router.get("/logout", (req, res) => {
+    req.logout(
+        function (err) {
+            if (err) { return next(err); }
+            req.flash("success_msg", "session terminated");
+            res.redirect("/login");
+        })
+});
+
+
+module.exports = { router }

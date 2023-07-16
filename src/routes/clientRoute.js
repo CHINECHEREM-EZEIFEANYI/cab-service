@@ -13,7 +13,9 @@ router.get("/signIn", function (req, res) {
 router.get("/login", function (req, res) {
     res.render('login')
 });
-
+router.get("/booking/dashboard", authUser, function (req, res) {
+    res.render('studentdashboard', { user: req.user.name })
+})
 // Endpoint for requesting a cab booking
 router.post('/booking', authUser, (req, res) => {
     const { origin, destination, passengerCount } = req.body;
@@ -41,3 +43,5 @@ router.get('/booking/:id', authUser, (req, res) => {
     const bookingId = req.params.id;
     res.json({ id: bookingId, origin: '...', destination: '...', passengerCount: '...' });
 });
+
+module.exports = {router}
