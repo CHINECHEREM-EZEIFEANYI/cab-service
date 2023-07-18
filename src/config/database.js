@@ -2,7 +2,7 @@
 require('dotenv').config();
 const mongoose = require('mongoose')
 
-const url = `mongodb+srv://sample_user:<password>@my-sample-cluster-b3ugy.mongodb.net/<dbname>?retryWrites=true&w=majority`;
+const url = `mongodb + srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.vc86snd.mongodb.net/?retryWrites=true&w=majority`;
 
 const connectionParams = {
     useNewUrlParser: true,
