@@ -1,25 +1,18 @@
-const mongoose = require('mongoose');
-mongoose.Promise = global.Promise;
+//db.js
+require('dotenv').config();
+const mongoose = require('mongoose')
 
-const User = require('../models/User');
-const Car = require('../models/Car');
-const RentedCarInfo = require('../models/RentedCarInfo')
+const url = `mongodb+srv://sample_user:<password>@my-sample-cluster-b3ugy.mongodb.net/<dbname>?retryWrites=true&w=majority`;
 
-module.exports = config => {
-    mongoose.connect(config.dbPath, {
-        useMongoClient: true
-    });
-    const db = mongoose.connection;
-    db.once('open', err => {               
-        if (err) throw err;
-        User.seedAdminUser().then(() => {
-            console.log('Database ready');
-        }).catch((reason) => {
-            console.log('Something went wrong');
-            console.log(reason);
-        });
-    });
-    db.on('error', reason => {
-        console.log(reason);
-    })
+const connectionParams = {
+    useNewUrlParser: true,
+    useCreateIndex: true,
+    useUnifiedTopology: true
 }
+mongoose.connect(url, connectionParams)
+    .then(() => {
+        console.log('Connected to database ')
+    })
+    .catch((err) => {
+        console.error(`Error connecting to the database. \n${err}`)
+    });
