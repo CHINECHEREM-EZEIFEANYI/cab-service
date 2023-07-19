@@ -1,6 +1,8 @@
 const passport = require('passport')
 const LocalStrategy = require('passport-local').Strategy
-const { pool } = require('./dbConfig')
+const passportLocalMongoose = require('passport-local-mongoose');
+const bodyParser = require('body-parser'); 
+const session = require('express-session'); 
 const bcrypt = require('bcrypt')
 
 function initialize(passport) {
