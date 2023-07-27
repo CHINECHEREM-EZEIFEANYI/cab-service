@@ -47,15 +47,15 @@ function initialize(passport) {
     passport.serializeUser((user, done) => done(null, user.id));
     passport.deserializeUser((id, done) => {
         [id], (err, results) => {
-                if (err) {
-                    throw err;
-                }
-                return done(null, results.rows[0])
-
+            if (err) {
+                throw err;
             }
-        )
+            return done(null, results.rows[0])
+
+        }
+        
     }
     )
-};
-
-module.exports = initialize;
+    
+}
+module.exports = initialize
