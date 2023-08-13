@@ -27,7 +27,9 @@ export default function page() {
           id={"email"}
           name={"email"}
           startIcon={<MdEmail />}
-          error={formik.errors.email && formik.touched.email}
+          onChange={formik.handleChange}
+          onBlur={formik.handleBlur}
+          error={formik.errors.email && formik.touched.email && formik.errors.email}
         />
         <div className="h-[2.5rem]">
           <Button bgWhite type={"submit"}>

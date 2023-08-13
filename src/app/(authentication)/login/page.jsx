@@ -24,6 +24,7 @@ export default function page() {
       console.log(values);
     },
   });
+
   return (
     <div className="w-[98%] md:w-[60%] lg:w-[40%] mx-auto forms-background py-8 px-4 text-white relative mt-[4rem] rounded-md">
       <h1 className="text-center text-2xl font-righteous">Login Page</h1>
@@ -41,7 +42,7 @@ export default function page() {
           id={"email"}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          error={formik.errors.email && formik.touched.email}
+          error={formik.errors.email && formik.touched.email && formik.errors.email}
         />
         <TextField
           type={"password"}
@@ -51,7 +52,7 @@ export default function page() {
           id={"password"}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          error={formik.errors.password && formik.touched.password}
+          error={formik.errors.password && formik.touched.password && formik.errors.password}
         />
         <div className="flex items-center gap-1 text-sm">
           <CheckButton />

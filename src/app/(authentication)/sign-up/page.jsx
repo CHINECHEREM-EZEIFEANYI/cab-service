@@ -7,7 +7,7 @@ import { MdEmail, MdOutlineKey } from "react-icons/md";
 import { BsFillCarFrontFill } from "react-icons/bs";
 import { FaUser } from "react-icons/fa";
 import TextField from "@/components/forms/TextField";
-import { loginSchema } from "@/components/forms/validattionRegex";
+import { SignUpSchema, loginSchema } from "@/components/forms/validattionRegex";
 import { Button, CheckButton } from "@/components/ui";
 import { ListBox } from "@/components/forms";
 
@@ -19,18 +19,18 @@ export default function page() {
     initialValues: {
       lastName: "",
       firstName: "",
-      lincense: "",
+      license: "",
       email: "",
       password: "",
     },
-    validationSchema: loginSchema,
+    validationSchema: SignUpSchema,
     onSubmit: (values) => {
       // handle form submition when submit button is clicked
       console.log(values);
     },
   });
   return (
-    <div className="w-[98%] md:w-[60%] lg:w-[40%] mx-auto forms-background py-8 px-4 text-white relative mt-[2rem] rounded-md">
+    <div className="w-[98%] md:w-[60%] lg:w-[40%] mx-auto forms-background py-4 px-4 text-white relative mt-[2rem] rounded-md">
       <h1 className="text-center text-2xl font-righteous">Register</h1>
       <p className="text-sm font-inter">Choose Account Type</p>
       <div className="">
@@ -46,7 +46,7 @@ export default function page() {
           id={"lastName"}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          error={formik.errors.lastName && formik.touched.lastName}
+          error={formik.errors.lastName && formik.touched.lastName && formik.errors.lastName}
         />
         <TextField
           type={"text"}
@@ -56,18 +56,18 @@ export default function page() {
           id={"firstName"}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          error={formik.errors.firstName && formik.touched.firstName}
+          error={formik.errors.firstName && formik.touched.firstName && formik.errors.firstName}
         />
         {selected.name == "Driver" && (
           <TextField
             type={"text"}
-            placeholder={"Lincense Number"}
+            placeholder={"License Number"}
             startIcon={<BsFillCarFrontFill />}
-            name={"lincense"}
+            name={"license"}
             id={"license"}
             onChange={formik.handleChange}
             onBlur={formik.handleBlur}
-            error={formik.errors.lincense && formik.touched.lincense}
+            error={formik.errors.license && formik.touched.license && formik.errors.license}
           />
         )}
 
@@ -79,7 +79,7 @@ export default function page() {
           id={"email"}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          error={formik.errors.email}
+          error={formik.errors.email && formik.touched.email && formik.errors.email}
         />
         <TextField
           type={"password"}
@@ -89,7 +89,7 @@ export default function page() {
           id={"password"}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
-          error={formik.errors.password}
+          error={formik.errors.password && formik.touched.password && formik.errors.password}
         />
 
         <div className="h-[2.5rem]">
