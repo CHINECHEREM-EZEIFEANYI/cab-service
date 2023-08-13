@@ -6,74 +6,43 @@ const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt')
 
 function initialize(passport) {
-    const authenticateUser = (email, password, done) => {
-        pool.query(
-            
-            [email],
-            (err, results) => {
-                if (err) {
-                    throw err
-                }
-                console.log(results.rows)
+    passport.use(new LocalStrategy({ usernameField: 'email' }, (email, password, done) => {
+        const usersCollection = db.collection('users');
 
-                if (results.rows.length > 0) {
-                    const user = results.rows[0]
-                    bcrypt.compare(password, user.password, (err, isMatch) => {
-                        if (err) {
-                            throw err
-                        }
-                        if (isMatch) {
-                            return done(null, user);
-                        } else {
-                            return done(null, false, { message: 'Password does not match user' })
-                        }
-                    });
-                } else {
-                    return done(null, false, { message: 'email not registered' })
-                }
-            }
-
-
-        )
-
-    }
-    module.exports = function (passport) {
-        passport.use(
-            new localStrategy((username, password, done) => {
-                User.findOne({ username: username }, (err, user) => {
-                    if (err) throw err;
-                    if (!user) return done(null, false);
-                    bcrypt.compare(password, user.password, (err, result) => {
-                        if (err) throw err;
-                        if (result === true) {
-                            return done(null, user);
-                        } else {
-                            return done(null, false);
-                        }
-                    });
-                });
-            })
-        );
-
-    passport.use(
-        new LocalStrategy({
-            usernameField: "email",
-            passwordField: "password"
-        }, authenticateUser
-        )
-    );
-    passport.serializeUser((user, done) => done(null, user.id));
-    passport.deserializeUser((id, done) => {
-        [id], (err, results) => {
+        usersCollection.findOne({ email }, (err, user) => {
             if (err) {
-                throw err;
+                return done(err);
             }
-            return done(null, results.rows[0])
 
-        }
-        
-    }
-    )
-    
+            if (!user) {
+                return done(null, false, { message: 'Email not registered' });
+            }
+
+            bcrypt.compare(password, user.password, (err, isMatch) => {
+                if (err) {
+                    return done(err);
+                }
+
+                if (isMatch) {
+                    return done(null, user);
+                } else {
+                    return done(null, false, { message: 'Password does not match user' });
+                }
+            });
+        });
+    }));
+
+    passport.serializeUser((user, done) => done(null, user._id));
+    passport.deserializeUser((id, done) => {
+        const usersCollection = db.collection('users');
+
+        usersCollection.findOne({ _id: ObjectId(id) }, (err, user) => {
+            if (err) {
+                return done(err);
+            }
+            return done(null, user);
+        });
+    });
 }
+
 module.exports = initialize
