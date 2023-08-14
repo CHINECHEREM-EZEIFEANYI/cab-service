@@ -1,5 +1,7 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt')
+var randtoken = require("rand-token");
+const nodemailer = require("nodemailer");
 
 exports.registerUser = async function (req, res) {
     const {
@@ -40,7 +42,7 @@ exports.registerUser = async function (req, res) {
 
         exports.CheckEmailAndRegister = function (name, email, role, hashedPassword, req, res) {
             const usersCollection = db.collection('users');
-  // Check if the email already exists in the "users" collection
+            // Check if the email already exists in the "users" collection
             usersCollection.findOne({ email }, (err, existingUser) => {
                 if (err) {
                     throw err;
@@ -71,4 +73,3 @@ exports.registerUser = async function (req, res) {
         };
     };
 }
-
