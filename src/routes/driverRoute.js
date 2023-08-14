@@ -1,7 +1,7 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const { authUser, authRole } = require('.../basicAuth')
-const {router} = require ('./clientRoute')
+const {router} = require ('./passengerRoute')
 const app = express();
 app.use(bodyParser.json());
 

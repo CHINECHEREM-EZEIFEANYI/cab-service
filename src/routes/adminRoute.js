@@ -1,33 +1,23 @@
 const { addDriver, deleteDriver, viewUser, viewDriver, ViewBookings } = require('../controllers/admin')
 const express = require("express");
 const adminrouter = express.Router();
+const { authUser, authRole } = require('.../basicAuth')
 
 
 
 //adding new driver
-adminrouter.post('/new', checkAuthenticated, addDriver);
+adminrouter.post('/new', authRole, addDriver);
 
 //deleting to-do from the list
-adminrouter.delete('/delete/:id', checkAuthenticated, deleteDriver)
+adminrouter.delete('/delete/:id', authRole, deleteDriver)
 
 //rendering userpages
-adminrouter.get('/viewuser', checkAuthenticated, viewUser);
+adminrouter.get('/viewuser', authRole, viewUser);
 
 //viewing drivers in the db
-adminrouter.get('/viewdriver', checkAuthenticated, viewDriver);
+adminrouter.get('/viewdriver', authRole, viewDriver);
 //viewing bookings in the db
-adminrouter.get('/viewbookings', checkAuthenticated, ViewBookings);
+adminrouter.get('/viewbookings', authRole, ViewBookings);
 
-function checkAuthenticated(req, res, next) {
-    if (req.user) {
-        next();
-    }
-
-    else {
-        req.flash('success_msg', 'You need to be authenticated to access this page');
-        res.redirect("/users/login");
-
-    }
-}
 
 module.export = adminrouter
