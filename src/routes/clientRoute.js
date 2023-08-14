@@ -7,8 +7,8 @@ router.get("/", function (req, res) {
     res.render('index')
 });
 
-router.get("/signIn", function (req, res) {
-    res.render('signup')
+router.get("/signUp", function (req, res) {
+    res.render('page.jsx')
 });
 router.get("/login", function (req, res) {
     res.render('login')
