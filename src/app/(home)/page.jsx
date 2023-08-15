@@ -1,3 +1,8 @@
+import { Banner } from "./(components)";
 export default function page() {
-  return <div>home page</div>;
+  return (
+    <main className="w-full">
+      <Banner />
+    </main>
+  );
 }
