@@ -6,7 +6,7 @@ export default function Banner() {
     hidden: { x: "-100vw" },
     show: {
       x: 0,
-      transition: { type: "spring", duration: 0.8, bounce: 0.6, delayChildren: 2 },
+      transition: { type: "spring", duration: 2, bounce: 0.6, delayChildren: 2 },
     },
   };
 

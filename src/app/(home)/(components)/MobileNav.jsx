@@ -2,7 +2,6 @@
 import React, { useRef } from "react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import useClickAwayListener from "@/hooks/useClickAway";
 
 const links = [
   { id: 1, name: "Home", url: "/" },
@@ -25,7 +24,6 @@ export default function MobileNav({ openSideNav, setOpenSideNav }) {
   };
 
   const navRef = useRef();
-  useClickAwayListener(navRef, closeSideNav);
   return (
     <>
       <AnimatePresence>
@@ -36,7 +34,6 @@ export default function MobileNav({ openSideNav, setOpenSideNav }) {
             initial="hidden"
             animate="show"
             exit={{ x: "100vw" }}
-            ref={navRef}
           >
             <ul className="flex flex-col gap-4 justify-center items-center">
               {links.map((item) => {

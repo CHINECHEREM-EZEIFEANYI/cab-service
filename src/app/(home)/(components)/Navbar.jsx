@@ -1,16 +1,23 @@
 "use client";
-import { useState } from "react";
+import { useState, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { BiMenu } from "react-icons/bi";
 import { MobileNav } from ".";
+import useClickAwayListener from "@/hooks/useClickAway";
 
 export default function Navbar() {
   const [openSideNav, setOpenSideNav] = useState(false);
+  const headerRef = useRef();
   const pathname = usePathname();
+  useClickAwayListener(headerRef, () => setOpenSideNav((prev) => !prev));
 
+  console.log(openSideNav);
   return (
-    <header className="z-[100] w-full py-4 px-4 absolute text-white flex items-center">
+    <header
+      className="z-[100] w-full py-4 px-4 absolute text-white flex items-center"
+      ref={headerRef}
+    >
       <p className="text-white z-10 text-2xl font-righteous">
         Swift <span className="text-primary">Rides</span>
       </p>
@@ -48,7 +55,7 @@ export default function Navbar() {
 
       <button
         type="button"
-        className="text-white ml-auto text-[2rem] border border-primary p-1 lg:hidden"
+        className="text-white ml-auto text-[2rem] border border-primary p-1 lg:hidden rounded-lg"
         onClick={() => setOpenSideNav((prev) => !prev)}
       >
         <BiMenu />
