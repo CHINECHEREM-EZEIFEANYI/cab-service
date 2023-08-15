@@ -51,4 +51,8 @@
     display: block;
     background-color: transparent;
   }
+
+  .popover {
+    background-color: rgba(50, 43, 51, 0.8);
+  }
 }

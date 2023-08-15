@@ -1,10 +1,12 @@
 "use client";
+import { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { BiMenu } from "react-icons/bi";
 import { MobileNav } from ".";
 
 export default function Navbar() {
+  const [openSideNav, setOpenSideNav] = useState(false);
   const pathname = usePathname();
 
   return (
@@ -47,10 +49,11 @@ export default function Navbar() {
       <button
         type="button"
         className="text-white ml-auto text-[2rem] border border-primary p-1 lg:hidden"
+        onClick={() => setOpenSideNav((prev) => !prev)}
       >
         <BiMenu />
       </button>
-      <MobileNav />
+      <MobileNav openSideNav={openSideNav} setOpenSideNav={setOpenSideNav} />
     </header>
   );
 }
