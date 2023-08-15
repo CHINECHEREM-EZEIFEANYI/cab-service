@@ -32,3 +32,20 @@ router.post(
         failureFlash: true,
     })
 );
+router.get('/booking/:id', authUser, (req, res) => {
+    const bookingId = req.params.id;
+    res.json({ id: bookingId, origin: '...', destination: '...', passengerCount: '...' });
+});
+
+//reset password routes
+router.get("/driver/passwordreset", (req, res) => {
+    res.render("passwordreset");
+});
+router.get("/driver/logout", (req, res) => {
+    req.logOut();
+    req.flash("success_msg", "you have logged out");
+    res.redirect("/users/login");
+});
+router.post("/driver/passwordreset", ResetPassword)
+
+module.export = { router}
