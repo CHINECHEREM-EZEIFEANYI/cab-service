@@ -10,7 +10,7 @@ export default function Navbar() {
   const [openSideNav, setOpenSideNav] = useState(false);
   const headerRef = useRef();
   const pathname = usePathname();
-  useClickAwayListener(headerRef, () => setOpenSideNav((prev) => !prev));
+  useClickAwayListener(headerRef, () => setOpenSideNav(false));
 
   console.log(openSideNav);
   return (
@@ -18,9 +18,11 @@ export default function Navbar() {
       className="z-[100] w-full py-4 px-4 absolute text-white flex items-center"
       ref={headerRef}
     >
-      <p className="text-white z-10 text-2xl font-righteous">
-        Swift <span className="text-primary">Rides</span>
-      </p>
+      <Link href="/">
+        <p className="text-white z-10 text-2xl font-righteous">
+          Swift<span className="text-primary">Rides</span>
+        </p>
+      </Link>
       <nav className="ml-[3rem] hidden lg:flex gap-10 font-inter font-[600]">
         <Link
           href={"/"}
