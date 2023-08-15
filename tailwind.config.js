@@ -26,6 +26,9 @@ module.exports = {
       backgroundImage: {
         auth: 'url("/images/taxi-photo.webp")',
       },
+      boxShadow: {
+        benefits: "8px 8px 48px -16px rgba(242,237,242,1)",
+      },
     },
   },
   plugins: [],
