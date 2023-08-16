@@ -14,42 +14,5 @@ function authRole(req, res, next) {
     }
     next()
 }
-function registerUser(email, password, done) {
-    const usersCollection = db.collection('users');
 
-    // Check if the email is already taken
-    usersCollection.findOne({ email }, (err, existingUser) => {
-        if (err) {
-            return done(err);
-        }
-
-        if (existingUser) {
-            return done(null, false, { message: 'Email already in use' });
-        }
-
-        // If the email is not taken, hash the password and create a new user
-        bcrypt.hash(password, 10, (err, hashedPassword) => {
-            if (err) {
-                return done(err);
-            }
-
-            const newUser = {
-                email: email,
-                password: hashedPassword,
-            };
-
-            // Insert the new user into the database
-            usersCollection.insertOne(newUser, (err, result) => {
-                if (err) {
-                    return done(err);
-                }
-
-                return done(null, result.ops[0]);
-            });
-        });
-    });
-}
-
-
-
-module.exports = { authUser, authRole, registerUser }
+module.exports = { authUser, authRole, }
