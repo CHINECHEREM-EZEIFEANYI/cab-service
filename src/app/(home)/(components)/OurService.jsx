@@ -66,7 +66,7 @@ const FeatureCards = ({ title, description, index }) => {
       custom={index}
     >
       <p className="text-center text-xl  font-inter font-[700]">{title}</p>
-      <p className="text-darkGrey">{description}</p>
+      <p className="text-textGrey">{description}</p>
     </motion.div>
   );
 };

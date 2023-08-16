@@ -14,7 +14,7 @@ const sideNav = {
   hidden: { x: "100vw" },
   show: {
     x: 0,
-    transition: { type: "spring", duration: 1.8, bounce: 0.6, delayChildren: 2 },
+    transition: { ease: "linear", duration: 1, bounce: 0.6, delayChildren: 2 },
   },
 };
 
@@ -24,11 +24,11 @@ export default function MobileNav({ openSideNav, setOpenSideNav }) {
       <AnimatePresence>
         {openSideNav && (
           <motion.div
-            className="absolute top-20 font-jost font-[600] right-0 lg:hidden w-[70vw] flex flex-col popover py-2"
+            className="absolute top-20 font-jost font-[600] right-0 lg:hidden w-[70vw] gap-4 flex flex-col popover py-2"
             variants={sideNav}
             initial="hidden"
             animate="show"
-            exit={{ x: "100vw" }}
+            exit={{ x: "100vw", transition: { ease: "backIn" } }}
           >
             <ul className="flex flex-col gap-4 justify-center items-center">
               {links.map((item) => {

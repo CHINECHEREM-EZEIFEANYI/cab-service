@@ -2,7 +2,10 @@
 import React, { useRef, useEffect } from "react";
 import { motion, useInView } from "framer-motion";
 import { useAppContext } from "@/context/AppContext";
+import { useRouter } from "next/navigation";
+
 export default function Banner() {
+  const router = useRouter();
   const { setRideTextInView } = useAppContext();
   const bookRideText = useRef(null);
   const isInView = useInView(bookRideText, { margin: "-150px 0px 0px 0px" });
@@ -10,10 +13,11 @@ export default function Banner() {
     setRideTextInView(isInView);
   }, [isInView, setRideTextInView]);
   const bannerBounce = {
-    hidden: { x: "-100vw" },
+    hidden: { x: -100, opacity: 0 },
     show: {
       x: 0,
-      transition: { type: "spring", duration: 2, bounce: 0.6, delayChildren: 2 },
+      opacity: 1,
+      transition: { duration: 1.5, ease: "easeOut", delayChildren: 2 },
     },
   };
 
@@ -50,6 +54,7 @@ export default function Banner() {
             className="relative top-[45%] bg-primary text-white text-[2rem] lg:text-[2.5rem] font-[600] rounded-lg px-6 py-2 md:px-10 md:py-4 shadow-2xl"
             variants={buttonAnimation}
             whileHover="hover"
+            onClick={() => router.push("/select-cab")}
           >
             Get A Ride
           </motion.button>
