@@ -1,5 +1,5 @@
 "use client";
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { BiMenu } from "react-icons/bi";
@@ -8,11 +8,16 @@ import useClickAwayListener from "@/hooks/useClickAway";
 
 export default function Navbar() {
   const [openSideNav, setOpenSideNav] = useState(false);
+
   const headerRef = useRef();
   const pathname = usePathname();
   useClickAwayListener(headerRef, () => setOpenSideNav(false));
 
-  console.log(openSideNav);
+  const closeSideNav = () => {
+    console.log("hello");
+    setOpenSideNav(false);
+  };
+
   return (
     <header
       className="z-[100] w-full py-4 px-4 absolute text-white flex items-center"
@@ -27,14 +32,20 @@ export default function Navbar() {
         <Link
           href={"/"}
           className={` ${pathname == "/" ? "border-primary border-b-2" : "border-0"} `}
+          onClick={closeSideNav}
         >
           Home
         </Link>
-        <Link href={"#"}>Our Services</Link>
-        <Link href={"#"}>About Us</Link>
+        <Link href={"#"} onClick={closeSideNav}>
+          Our Services
+        </Link>
+        <Link href={"#"} onClick={closeSideNav}>
+          About Us
+        </Link>
         <Link
           href={"/contact-us"}
           className={` ${pathname == "/contact-us" ? "border-primary border-b-2" : "border-0"} `}
+          onClick={closeSideNav}
         >
           Contact Us
         </Link>

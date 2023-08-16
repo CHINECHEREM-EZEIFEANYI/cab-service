@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Faq from "react-faq-component";
 import { BsPlusLg } from "react-icons/bs";
 import { BiMinus } from "react-icons/bi";
@@ -37,7 +37,6 @@ const styles = {
 const config = {
   animate: true,
   arrowIcon: "V",
-  openOnload: 0,
   expandIcon: <BsPlusLg />,
   collapseIcon: <BiMinus />,
 };

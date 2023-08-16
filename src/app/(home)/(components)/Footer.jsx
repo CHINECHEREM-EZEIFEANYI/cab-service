@@ -7,8 +7,8 @@ import { MdLocationOn } from "react-icons/md";
 const footerLinks = [
   { id: 1, name: "Home", url: "/" },
   { id: 2, name: "Our Services", url: "/services" },
-  { id: 3, name: "About", url: "/about-us" },
-  { id: 4, name: "Contact", url: "/contact-us" },
+  { id: 3, name: "About Us", url: "/about-us" },
+  { id: 4, name: "Contact Us", url: "/contact-us" },
 ];
 
 export default function Footer() {

@@ -39,7 +39,9 @@ export default function MobileNav({ openSideNav, setOpenSideNav }) {
               {links.map((item) => {
                 return (
                   <li key={item.id} className="text-lg">
-                    <Link href={item.url}>{item.name}</Link>
+                    <Link href={item.url} onClick={() => setOpenSideNav(false)}>
+                      {item.name}
+                    </Link>
                   </li>
                 );
               })}
