@@ -13,7 +13,7 @@ const footerLinks = [
 
 export default function Footer() {
   return (
-    <div className="bg-footer flex flex-col md:flex-row gap-y-2 text-white font-inter relative px-4 py-4 lg:px-[12rem] lg:py-[4rem]">
+    <div className="bg-footer flex flex-col md:flex-row gap-y-2 text-white font-inter relative px-4 py-6 lg:px-[12rem] lg:py-[4rem]">
       <div className="flex flex-col md:w-1/2 lg:w-1/4 gap-6">
         <Link href="/">
           <p className="text-white z-10 text-2xl font-righteous">
@@ -64,7 +64,7 @@ export default function Footer() {
         </ul>
       </div>
 
-      <div className="md:w-1/2 lg:w-1/4 flex flex-col gap-6 md:items-center">
+      <div className="md:w-1/2 lg:w-1/4 flex flex-col gap-6 md:items-center mb-6">
         <p className="font-[600]">Follow US</p>
         <div className="flex flex-col gap-2 text-darkGrey text-xs">
           <ul className="text-darkGrey flex text-lg gap-4">
@@ -80,7 +80,7 @@ export default function Footer() {
           </ul>
         </div>
       </div>
-      <p className="absolute bottom-0 text-center text-xs left-[50%] translate-x-[-50%] text-darkGrey my-2">
+      <p className="absolute w-full bottom-0 text-center text-xs left-[50%] translate-x-[-50%] text-darkGrey my-2">
         &copy; 2023 SwiftRides. All rights reserved.
       </p>
     </div>
