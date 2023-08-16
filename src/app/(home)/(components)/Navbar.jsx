@@ -1,26 +1,31 @@
 "use client";
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { BiMenu } from "react-icons/bi";
 import { MobileNav } from ".";
 import useClickAwayListener from "@/hooks/useClickAway";
+import { useAppContext } from "@/context/AppContext";
+import { motion } from "framer-motion";
+
+const navLinks = [
+  { id: 1, title: "Home", url: "/" },
+  { id: 2, title: "Our Services", url: "#" },
+  { id: 3, title: "About Us", url: "/about" },
+  { id: 4, title: "Contact Us", url: "/contact-us" },
+];
 
 export default function Navbar() {
   const [openSideNav, setOpenSideNav] = useState(false);
-
+  const { rideTextInView } = useAppContext();
   const headerRef = useRef();
   const pathname = usePathname();
   useClickAwayListener(headerRef, () => setOpenSideNav(false));
-
-  const closeSideNav = () => {
-    console.log("hello");
-    setOpenSideNav(false);
-  };
-
   return (
     <header
-      className="z-[100] w-full py-4 px-4 absolute text-white flex items-center"
+      className={`z-[100] w-full py-4 px-4 fixed top-0 text-white flex items-center ${
+        rideTextInView ? " bg-transparent" : "bg-[#141919]"
+      }`}
       ref={headerRef}
     >
       <Link href="/">
@@ -29,26 +34,19 @@ export default function Navbar() {
         </p>
       </Link>
       <nav className="ml-[3rem] hidden lg:flex gap-10 font-inter font-[600]">
-        <Link
-          href={"/"}
-          className={` ${pathname == "/" ? "border-primary border-b-2" : "border-0"} `}
-          onClick={closeSideNav}
-        >
-          Home
-        </Link>
-        <Link href={"#"} onClick={closeSideNav}>
-          Our Services
-        </Link>
-        <Link href={"#"} onClick={closeSideNav}>
-          About Us
-        </Link>
-        <Link
-          href={"/contact-us"}
-          className={` ${pathname == "/contact-us" ? "border-primary border-b-2" : "border-0"} `}
-          onClick={closeSideNav}
-        >
-          Contact Us
-        </Link>
+        {navLinks.map((item) => {
+          return (
+            <Link key={item.id} href={item.url} className={`relative`}>
+              {item.title}
+              {pathname == item.url && (
+                <motion.span
+                  layoutId="underline"
+                  className="absolute border-b border-primary w-full  left-0 top-full"
+                />
+              )}
+            </Link>
+          );
+        })}
       </nav>
       <div className="hidden lg:flex ml-auto gap-4 font-[600]">
         <Link href={"/login"}>
@@ -77,3 +75,5 @@ export default function Navbar() {
     </header>
   );
 }
+
+// bg-[#141919]

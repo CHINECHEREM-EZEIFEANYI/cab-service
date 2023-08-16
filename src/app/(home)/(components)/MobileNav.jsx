@@ -19,11 +19,6 @@ const sideNav = {
 };
 
 export default function MobileNav({ openSideNav, setOpenSideNav }) {
-  const closeSideNav = () => {
-    setOpenSideNav(false);
-  };
-
-  const navRef = useRef();
   return (
     <>
       <AnimatePresence>

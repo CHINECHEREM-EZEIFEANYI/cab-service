@@ -1,7 +1,14 @@
 "use client";
-import React from "react";
-import { motion } from "framer-motion";
+import React, { useRef, useEffect } from "react";
+import { motion, useInView } from "framer-motion";
+import { useAppContext } from "@/context/AppContext";
 export default function Banner() {
+  const { setRideTextInView } = useAppContext();
+  const bookRideText = useRef(null);
+  const isInView = useInView(bookRideText, { margin: "-150px 0px 0px 0px" });
+  useEffect(() => {
+    setRideTextInView(isInView);
+  }, [isInView, setRideTextInView]);
   const bannerBounce = {
     hidden: { x: "-100vw" },
     show: {
@@ -33,7 +40,11 @@ export default function Banner() {
           animate="show"
         >
           <h1 className="text-[3rem] lg:text-[5rem] font-jost font-[600]">
-            <span className="text-primary"> Book A Ride </span> <br /> Embrace the Adventure
+            <span ref={bookRideText} className="text-primary">
+              {" "}
+              Book A Ride{" "}
+            </span>{" "}
+            <br /> Embrace the Adventure
           </h1>
           <motion.button
             className="relative top-[45%] bg-primary text-white text-[2rem] lg:text-[2.5rem] font-[600] rounded-lg px-6 py-2 md:px-10 md:py-4 shadow-2xl"
