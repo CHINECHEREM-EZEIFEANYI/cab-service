@@ -10,8 +10,8 @@ import { motion } from "framer-motion";
 
 const navLinks = [
   { id: 1, title: "Home", url: "/" },
-  { id: 2, title: "Our Services", url: "#" },
-  { id: 3, title: "About Us", url: "/about" },
+  { id: 2, title: "Our Services", url: "/services" },
+  { id: 3, title: "About Us", url: "/about-us" },
   { id: 4, title: "Contact Us", url: "/contact-us" },
 ];
 
@@ -24,7 +24,11 @@ export default function Navbar() {
   return (
     <header
       className={`z-[100] w-full py-4 px-4 fixed top-0 text-white flex items-center ${
-        rideTextInView ? " bg-transparent" : "bg-[#141919]"
+        rideTextInView && pathname == "/"
+          ? " bg-transparent"
+          : !rideTextInView && pathname == "/"
+          ? "bg-[#141919]"
+          : "bg-[#141919]"
       }`}
       ref={headerRef}
     >
