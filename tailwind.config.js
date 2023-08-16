@@ -16,6 +16,7 @@ module.exports = {
         black: "#0a0a0a",
         red: "#EB4335",
         background: "rgba(158, 133, 145, 0.6)",
+        footer: "#272727",
       },
       fontFamily: {
         inter: ["var(--font-inter)"],

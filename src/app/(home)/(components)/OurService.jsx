@@ -1,5 +1,7 @@
-import React from "react";
+"use client";
+import React, { useEffect, useRef } from "react";
 
+import { motion, useScroll } from "framer-motion";
 const benefitsData = [
   {
     id: 1,
@@ -39,12 +41,33 @@ const benefitsData = [
   },
 ];
 
-const FeatureCards = ({ title, description }) => {
+const cardsVariant = {
+  initial: {
+    y: 100,
+    opacity: 0,
+  },
+  animate: (index) => ({
+    y: 0,
+    opacity: 1,
+
+    transition: {
+      type: "spring",
+      delay: 0.5 * index,
+    },
+  }),
+};
+const FeatureCards = ({ title, description, index }) => {
   return (
-    <div className="w-[90%] lg:w-[30%] md:w-[45%] shadow-benefits py-8 px-4 flex flex-col gap-4">
+    <motion.div
+      className="w-[90%] lg:w-[30%] md:w-[45%] shadow-benefits py-8 px-4 flex flex-col gap-4"
+      variants={cardsVariant}
+      whileInView="onscreen"
+      viewport={{ once: true }}
+      custom={index}
+    >
       <p className="text-center text-xl  font-inter font-[700]">{title}</p>
       <p className="text-darkGrey">{description}</p>
-    </div>
+    </motion.div>
   );
 };
 
@@ -54,11 +77,18 @@ export default function OurService() {
       <h2 className="text-center font-righteous text-[1.5rem] md:text-[2rem] w-fit my-4 border-b-2 border-primary relative left-[50%] -translate-x-[50%]">
         Benefits and Features
       </h2>
-      <div className="flex flex-wrap px-4 gap-4 justify-center">
-        {benefitsData.map((item) => {
-          return <FeatureCards key={item.id} title={item.title} description={item.description} />;
+      <motion.div className="flex flex-wrap px-4 gap-4 justify-center" initial="offscreen">
+        {benefitsData.map((item, index) => {
+          return (
+            <FeatureCards
+              key={item.id}
+              title={item.title}
+              description={item.description}
+              index={index}
+            />
+          );
         })}
-      </div>
+      </motion.div>
     </div>
   );
 }
