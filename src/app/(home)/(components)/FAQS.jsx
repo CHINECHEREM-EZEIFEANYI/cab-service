@@ -30,7 +30,7 @@ const styles = {
   // bgColor: 'white',
   titleTextColor: "#facc15",
   rowTitleColor: "#0a0a0a",
-  rowContentColor: "#a3a3a3",
+  rowContentColor: "#52525b",
   // arrowColor: "red",
 };
 

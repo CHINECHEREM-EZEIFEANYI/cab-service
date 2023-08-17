@@ -30,6 +30,8 @@ module.exports = {
       },
       boxShadow: {
         benefits: "8px 8px 48px -16px rgba(242,237,242,1)",
+        select_car: "0px 0px 5px 4px rgba(245,232,177,1)",
+        select_car_white: " 0px 0px 5px 4px rgba(245,244,242,1)",
       },
     },
   },
