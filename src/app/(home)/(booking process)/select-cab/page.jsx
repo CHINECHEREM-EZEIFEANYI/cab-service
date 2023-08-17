@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import Car from "../../../../../public/svg/car.svg";
 import Bus from "../../../../../public/svg/bus.svg";
 import { MdCheckCircle } from "react-icons/md";
@@ -12,6 +13,7 @@ const carsData = [
 
 export default function page() {
   const [selectedOption, setSelectedOption] = useState(1);
+  const router = useRouter();
   return (
     <div className="flex flex-col">
       <p className="flex justify-center font-jost text-[1.5rem] mt-6 font-[600]">Select Taxi</p>
@@ -39,7 +41,10 @@ export default function page() {
         })}
       </div>
 
-      <button className="text-lg text-white bg-primary w-fit self-center my-6 rounded-md px-6 py-2 font-[600] font-inter">
+      <button
+        className="text-lg text-white bg-primary w-fit self-center my-6 rounded-md px-6 py-2 font-[600] font-inter"
+        onClick={() => router.push("/choose-destination")}
+      >
         Next
       </button>
     </div>
