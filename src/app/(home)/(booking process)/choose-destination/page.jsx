@@ -27,7 +27,7 @@ export default function page() {
 
   const [endCoords, setEndCoords] = useState(null);
   const [coords, setCoords] = useState([]);
-
+  console.log(coords);
   useEffect(() => {
     if (coordinates) {
       setLocation({
@@ -38,6 +38,12 @@ export default function page() {
   }, [coordinates]);
 
   useEffect(() => {
+    if (endCoords != null) {
+      getDirections();
+    }
+  }, [endCoords]);
+
+  useEffect(() => {
     // Activate as soon as the control is loaded
     geoControlRef.current?.trigger();
   }, [geoControlRef.current]);
@@ -45,7 +51,7 @@ export default function page() {
   function getDirections() {
     axios
       .get(
-        `https://api.mapbox.com/directions/v5/mapbox/cycling/${latitude},${longitude};${endCoords[0]},${endCoords[1]}?geometries=geojson&access_token=pk.eyJ1Ijoic29zYXJpc3RpYyIsImEiOiJjbGlvYXY2M2YwNzlyM2VwOGt4dmQ0dmRyIn0.vvWi_LR2n0v6l3YiS0H6oA`
+        `https://api.mapbox.com/directions/v5/mapbox/driving/${latitude},${longitude};${endCoords[0]},${endCoords[1]}?geometries=geojson&access_token=pk.eyJ1Ijoic29zYXJpc3RpYyIsImEiOiJjbGlvYXY2M2YwNzlyM2VwOGt4dmQ0dmRyIn0.vvWi_LR2n0v6l3YiS0H6oA`
       )
       .then((response) => {
         const data = response.data.routes[0].geometry.coordinates;
@@ -56,11 +62,6 @@ export default function page() {
       });
   }
 
-  // useEffect(() => {
-  //   if (endCoords != null) {
-  //     getDirections();
-  //   }
-  // }, []);
   const geojson = {
     type: "Feature",
     properties: {},
@@ -91,16 +92,18 @@ export default function page() {
   const handleMapClicked = (e) => {
     const values = e.lngLat;
     const arrValues = Object.values(values);
+    console.log(arrValues);
     setEndCoords(arrValues);
+    // getDirections();
   };
 
   const handleLocateUser = (e) => {
     const coords = e.coords;
     console.log(coords);
-    // setLocation({
-    //   latitude: coords.latitude,
-    //   longitude: coords.longitude,
-    // });
+    setLocation({
+      latitude: coords.latitude,
+      longitude: coords.longitude,
+    });
   };
 
   return (
