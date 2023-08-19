@@ -11,7 +11,7 @@ import ReactMapGl, {
 } from "react-map-gl";
 import "mapbox-gl/dist/mapbox-gl.css";
 import Geocoder from "./Geocoder";
-import useDeviceCoords from "@/hooks/useDeviceCoords";
+import useDeviceCoords from "@/hooks/useDeviceLocation";
 
 export default function Map() {
   const { deviceCoords } = useDeviceCoords();

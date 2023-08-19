@@ -14,9 +14,10 @@ import Geocoder from "./Geocoder";
 
 import { useAppContext } from "@/context/AppContext";
 import axios from "axios";
-import useDeviceCoords from "@/hooks/useDeviceCoords";
+import useDeviceLocation from "@/hooks/useDeviceLocation";
 import Map from "./Map";
 export default function page() {
+  const { coordinates, error } = useDeviceLocation();
   const geoControlRef = useRef();
   const mapRef = useRef();
   const {
@@ -28,9 +29,17 @@ export default function page() {
   const [coords, setCoords] = useState([]);
 
   useEffect(() => {
+    if (coordinates) {
+      setLocation({
+        latitude: coordinates.latitude,
+        longitude: coordinates.longitude,
+      });
+    }
+  }, [coordinates]);
+
+  useEffect(() => {
     // Activate as soon as the control is loaded
     geoControlRef.current?.trigger();
-    console.log(geoControlRef.current);
   }, [geoControlRef.current]);
 
   function getDirections() {
@@ -128,7 +137,7 @@ export default function page() {
             onGeolocate={handleLocateUser}
           />
           <FullscreenControl />
-          <Popup longitude={longitude} latitude={latitude} anchor="top"></Popup>
+          {/* <Popup longitude={longitude} latitude={latitude} anchor="top"></Popup> */}
         </ReactMapGl>
       </div>
     </div>
