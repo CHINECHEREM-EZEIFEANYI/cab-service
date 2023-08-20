@@ -5,7 +5,7 @@ function useDeviceLocation() {
   const [coordinates, setCoordinates] = useState(null);
   const [error, setError] = useState(null);
 
-  useLayoutEffect(() => {
+  useEffect(() => {
     navigator.geolocation.getCurrentPosition((position) => {
       console.log(position);
     });
