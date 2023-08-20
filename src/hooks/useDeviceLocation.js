@@ -3,17 +3,17 @@ import { useState, useEffect, useLayoutEffect } from "react";
 
 function useDeviceLocation() {
   const [coordinates, setCoordinates] = useState(null);
+  const [appMounted, setAppMounted] = useState(false);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    navigator.geolocation.getCurrentPosition((position) => {
-      console.log(position);
-    });
+    setAppMounted(true);
+  }, []);
 
+  useEffect(() => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         function (position) {
-          console.log(position);
           const latitude = position.coords.latitude;
           const longitude = position.coords.longitude;
           console.log(latitude);
@@ -31,7 +31,7 @@ function useDeviceLocation() {
     } else {
       setError("Geolocation is not supported by this browser.");
     }
-  }, []);
+  }, [appMounted]);
 
   return { coordinates, error };
 }
