@@ -1,23 +1,23 @@
-const { addDriver, deleteDriver, viewUser, viewDriver, ViewBookings } = require('../controllers/admin')
+const { addDriver, deleteDriver, viewUser, viewDriver, getBookings } = require('../controllers/admin')
 const express = require("express");
 const adminrouter = express.Router();
-const { authUser, authRole } = require('.../basicAuth')
+const { authUser, authRole } = require("../basicAuth")
 
 
 
 //adding new driver
-adminrouter.post('/new', authRole, addDriver);
+adminrouter.post('/new', addDriver);
 
 //deleting to-do from the list
-adminrouter.delete('/delete/:id', authRole, deleteDriver)
+adminrouter.delete('/delete/:id',  deleteDriver)
 
 //rendering userpages
-adminrouter.get('/viewuser', authRole, viewUser);
+adminrouter.get('/viewuser',  viewUser);
 
 //viewing drivers in the db
-adminrouter.get('/viewdriver', authRole, viewDriver);
+adminrouter.get('/viewdriver',  viewDriver);
 //viewing bookings in the db
-adminrouter.get('/viewbookings', authRole, ViewBookings);
+adminrouter.get('/getBookings', getBookings);
 
 
-module.export = adminrouter
+module.exports = {adminrouter}

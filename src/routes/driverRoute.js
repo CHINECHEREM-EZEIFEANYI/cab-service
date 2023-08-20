@@ -1,7 +1,8 @@
 const express = require('express');
-const router = express();
-const { authUser, authRole } = require('.../basicAuth')
-
+const router = express.Router();
+const { authUser, authRole } = require("../basicAuth")
+const {registerUser, ResetPassword, updatePassword} = require("../controllers/controller")
+const passport = require("../passportconfig")
 
 router.get("/", function (req, res) {
     res.render('index')
@@ -24,14 +25,14 @@ router.post("/driver/register", registerUser, (req, res) => {
         res.render("login");
     }
 });
-router.post(
-    "/driver/login",
-    passport.authenticate("local", {
-        successRedirect: "/driver/dashboard",
-        failureRedirect: "/driver/login",
-        failureFlash: true,
-    })
-);
+// router.post(
+//     "/driver/login",
+//     passport.authenticate("local", {
+//         successRedirect: "/driver/dashboard",
+//         failureRedirect: "/driver/login",
+//         failureFlash: true,
+//     })
+// );
 router.get('/booking/:id', authUser, (req, res) => {
     const bookingId = req.params.id;
     res.json({ id: bookingId, origin: '...', destination: '...', passengerCount: '...' });
@@ -48,4 +49,4 @@ router.get("/driver/logout", (req, res) => {
 });
 router.post("/driver/passwordreset", ResetPassword)
 
-module.export = { router }
+module.exports = { router}

@@ -17,8 +17,8 @@ var mailOptions = {
     to: 'myfriend@yahoo.com',
     subject: 'Reset Password Link -ZeffyRide',
     html:
-        '<p>You requested for reset password, kindly use this <a href="http://localhost:8000/users/newpasswordpage?token=' +
-        token +
+  //      '<p>You requested for reset password, kindly use this <a href="http://localhost:8000/users/newpasswordpage?token=' +
+    //    token +
         '">link</a> to reset your password </p>'
 };
 mail.sendMail(mailOptions, function (error, info) {
@@ -150,7 +150,7 @@ exports.ResetPassword = function (req, res) {
         }
     });
 };
-exports.UpdatePassword = function (req, res) {
+exports.updatePassword = function (req, res) {
     const { token, password, password2 } = req.body;
     console.log({
         token,
