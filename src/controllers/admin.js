@@ -1,33 +1,48 @@
+const { DriverStatus } = require('../config/enum');
+const { userModel } = require('../model/user');
+
 const mongoose = require('mongoose');
 
-exports.addDriver = async function (req, res) {
-    const { name, licenseNumber } = req.body;
-    const driversCollection = db.collection('drivers');
+exports.approvedDriver = async function (req, res) {
+    const { approved, driverId } = req.body;
+    const isExist = await userModel.findById(driverId);
 
-        // Create a new driver document in the "drivers" collection
-        driversCollection.insertOne({ name, licenseNumber }, (err, result) => {
-            if (err) {
-                return res.status(500).json({ message: 'Error adding driver' });
-            }
-            console.log(result.ops); // The inserted document
-            res.redirect('/users'); // Redirect 
-        });
+    if (!isExist) {
+        return res.status(500).json({ message: 'Error adding driver' });
+    }
+
+    let status; 
+
+    if (approved) {
+        status = DriverStatus.APPROVED; 
+    } else {
+        status = DriverStatus.REJECTED; 
+    }
+
+    const driver = await userModel.updateOne({ _id: driverId }, { isDriverApproved: approved, driverStatus: status });
+    return res.status(200).json({ message: 'Driver added successfully' });
 };
-exports.deleteDriver = function (req, res) {
+
+exports.deleteDriver = async function (req, res) {
     const driverId = req.params.driverId;
-    const driversCollection = db.collection('drivers');
-    // Delete the driver document with the given ID from the "drivers" collection
-    driversCollection.deleteOne({ _id: ObjectId(driverId) }, (err, result) => {
-        if (err) {
-            return res.status(500).json({ message: 'Error deleting driver' });
-        }
-        console.log("Driver deleted sucessfully");
-        res.redirect('/users'); // Redirect 
-    })
+    const user = await userModel.findById(driverId);
+    if (!user) {
+        return res.status(500).json({ message: 'User Not Found' });
+    }
+    else {
+       userModel.deleteOne({ _id: driverId }, (err, result) => {
+            if (err) {
+                return res.status(500).json({ message: 'Error deleting driver' });
+            }
+           return res.status(200).json({ message: 'Driver deleted successfully' });
+            
+        });
+}
+   
 };
+
 exports.viewUser = function (req, res) {
-    const usersCollection = db.collection('users');
-    usersCollection.find({}).toArray((err, users) => {
+    userModel.find({}).toArray((err, users) => {
         if (err) {
             return res.status(500).json({ message: 'Error fetching user accounts' });
         }
@@ -35,8 +50,7 @@ exports.viewUser = function (req, res) {
     })
 }
 exports.viewDriver = function (req, res) {
-    const driversCollection = db.collection('drivers');
-    driversCollection.find({}).toArray((err, drivers) => {
+    userModel.find({}).toArray((err, drivers) => {
         if (err) {
             return res.status(500).json({ message: 'Error fetching drivers accounts' });
         }
@@ -44,9 +58,8 @@ exports.viewDriver = function (req, res) {
  })
 }
 exports.getBookings = function (req, res) {
-    const bookingsCollection = db.collection('bookings');
-    // Retrieve booking information from the "bookings" collection
-    bookingsCollection.find({}).toArray((err, bookings) => {
+
+    userModel.find({}).toArray((err, bookings) => {
         if (err) {
             return res.status(500).json({ message: 'Error fetching bookings' });
         }

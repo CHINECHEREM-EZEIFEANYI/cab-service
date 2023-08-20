@@ -80,4 +80,4 @@ urouter.post("/users/passwordreset", ResetPassword)
 })
 router.post("/users/newpasswordpage", UpdatePassword);*/
 
-module.exports = { urouter }
+module.exports =  urouter 

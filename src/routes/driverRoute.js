@@ -43,10 +43,11 @@ router.get("/driver/passwordreset", (req, res) => {
     res.render("passwordreset");
 });
 router.get("/driver/logout", (req, res) => {
-    req.logOut();
-    req.flash("success_msg", "you have logged out");
-    res.redirect("/users/login");
+    // req.logOut();
+    // req.flash("success_msg", "you have logged out");
+    // res.redirect("/users/login");
+    console.log ('test')
 });
 router.post("/driver/passwordreset", ResetPassword)
 
-module.exports = { router}
+module.exports =  router

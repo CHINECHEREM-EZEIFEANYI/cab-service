@@ -2,14 +2,12 @@ require('dotenv').config();
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 5000;
 const session = require('express-session');
 const { authUser, authRole } = require ("./src/basicAuth")
 const { v4: uuidv4 } = require('uuid'); 
 const apiKey = process.env.API_KEY;
-const { adminrouter } = require("./src/routes/adminRoute") ;
-const { urouter } = require("./src/routes/userRoute");
-const {router} = require("./src/routes/driverRoute")
+
 
 
 app.use(session({
@@ -25,9 +23,9 @@ app.use(bodyParser.json())
 app.get("/", (req, res) => {
     res.send('Hello World!');
 });
-app.use("/api/admin", adminrouter);
-app.use("/api/driver", router);
-app.use("/api/users", urouter);
+app.use("/api/admin", require("./src/routes/adminRoute"));
+app.use("/api/driver", require("./src/routes/driverRoute"));
+app.use("/api/users", require("./src/routes/userRoute"));
 
 
 
