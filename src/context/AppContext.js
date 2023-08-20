@@ -6,8 +6,8 @@ const AppContext = createContext();
 export default function AppContextProvider({ children }) {
   const [rideTextInView, setRideTextInView] = useState(true);
   const [location, setLocation] = useState({
-    latitude: 9.081999,
-    longitude: 8.675277,
+    latitude: 4.8472226,
+    longitude: 6.974604,
   });
   const value = {
     rideTextInView,

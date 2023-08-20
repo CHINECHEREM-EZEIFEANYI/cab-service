@@ -16,6 +16,9 @@ import { useAppContext } from "@/context/AppContext";
 import axios from "axios";
 import useDeviceLocation from "@/hooks/useDeviceLocation";
 import Map from "./Map";
+
+const accessToken =
+  "pk.eyJ1Ijoic29zYXJpc3RpYyIsImEiOiJjbGxmNm9qaHcwcTU3M2RuMXJuemdhY3FvIn0.UGsqZ4uDjRxlXs68ImhqjA";
 export default function page() {
   const { coordinates, error } = useDeviceLocation();
   const geoControlRef = useRef();
@@ -24,37 +27,27 @@ export default function page() {
     location: { latitude, longitude },
     setLocation,
   } = useAppContext();
-
-  const [endCoords, setEndCoords] = useState(null);
+  const [start, setStart] = useState([7.4112677, 6.8654786]);
+  const [endCoords, setEndCoords] = useState([7.4112677, 6.8654786]);
   const [coords, setCoords] = useState([]);
-  console.log(coords);
-  useEffect(() => {
-    if (coordinates) {
-      setLocation({
-        latitude: coordinates.latitude,
-        longitude: coordinates.longitude,
-      });
-    }
-  }, [coordinates]);
 
   useEffect(() => {
-    if (endCoords != null) {
-      getDirections();
-    }
-  }, [endCoords]);
+    getDirections(endCoords);
+  }, [start]);
 
   useEffect(() => {
     // Activate as soon as the control is loaded
     geoControlRef.current?.trigger();
   }, [geoControlRef.current]);
 
-  function getDirections() {
+  function getDirections(end) {
     axios
       .get(
-        `https://api.mapbox.com/directions/v5/mapbox/driving/${latitude},${longitude};${endCoords[0]},${endCoords[1]}?geometries=geojson&access_token=pk.eyJ1Ijoic29zYXJpc3RpYyIsImEiOiJjbGlvYXY2M2YwNzlyM2VwOGt4dmQ0dmRyIn0.vvWi_LR2n0v6l3YiS0H6oA`
+        `https://api.mapbox.com/directions/v5/mapbox/driving/${start[0]},${start[1]};${end[0]},${end[1]}?geometries=geojson&access_token=${accessToken}`
       )
       .then((response) => {
         const data = response.data.routes[0].geometry.coordinates;
+        console.log(data);
         setCoords(data);
       })
       .catch((error) => {
@@ -67,24 +60,21 @@ export default function page() {
     properties: {},
     geometry: {
       type: "LineString",
-      coordinates: coords,
+      coordinates: [...coords],
     },
   };
 
   const lineStyle = {
     id: "roadLayer",
     type: "line",
-    source: {
-      type: "geojson",
-      data: geojson,
-    },
+
     layout: {
       "line-join": "round",
       "line-cap": "round",
     },
     paint: {
       "line-color": "blue",
-      "line-width": 4,
+      "line-width": 2,
       "line-opacity": 0.75,
     },
   };
@@ -94,38 +84,35 @@ export default function page() {
     const arrValues = Object.values(values);
     console.log(arrValues);
     setEndCoords(arrValues);
-    // getDirections();
+    getDirections(arrValues);
   };
 
   const handleLocateUser = (e) => {
     const coords = e.coords;
-    console.log(coords);
-    setLocation({
-      latitude: coords.latitude,
-      longitude: coords.longitude,
-    });
+
+    setStart([coords.longitude, coords.latitude]);
   };
 
   return (
     <div>
       <p>choose a location</p>
       <p>
-        lat: {latitude}
-        lon: {longitude}
+        lat: {start[1]}
+        lon: {start[0]}
       </p>
       <div className="w-screen h-[60vh] lg:h-[30rem] lg:w-[40rem] mx-auto my-4">
         <ReactMapGl
           onClick={handleMapClicked}
-          mapboxAccessToken="pk.eyJ1Ijoic29zYXJpc3RpYyIsImEiOiJjbGlvYXY2M2YwNzlyM2VwOGt4dmQ0dmRyIn0.vvWi_LR2n0v6l3YiS0H6oA"
-          initialViewState={{ latitude: latitude, longitude: longitude, zoom: 12 }}
+          mapboxAccessToken={accessToken}
+          initialViewState={{ latitude: start[0], longitude: start[1], zoom: 12 }}
           mapStyle="mapbox://styles/mapbox/streets-v9"
         >
           <Geocoder setLocation={setLocation} />
           <Marker
-            latitude={latitude}
-            longitude={longitude}
+            latitude={start[1]}
+            longitude={start[0]}
             draggable
-            onDrag={(e) => setLocation({ latitude: e.lngLat.lat, longitude: e.lngLat.lng })}
+            onDragEnd={(e) => setStart([e.lngLat.lng, e.lngLat.lat])}
           />
 
           <Source id="routeSource" type="geojson" data={geojson}>
@@ -133,12 +120,7 @@ export default function page() {
           </Source>
 
           <NavigationControl />
-          <GeolocateControl
-            ref={geoControlRef}
-            showUserLocation
-            trackUserLocation
-            onGeolocate={handleLocateUser}
-          />
+          <GeolocateControl trackUserLocation showUserLocation onGeolocate={handleLocateUser} />
           <FullscreenControl />
           {/* <Popup longitude={longitude} latitude={latitude} anchor="top"></Popup> */}
         </ReactMapGl>
