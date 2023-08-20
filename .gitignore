@@ -2,3 +2,5 @@
 .env
 .env.test
 .vercel
+node_modules
+```
