@@ -22,21 +22,7 @@ app.get("/", (req, res) => {
     res.send('Hello World!');
 });
 
-res.send(`
-<html>
 
-<head>
-    <title>Google Maps Integration</title>
-    <script src="https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places"></script>
-</head>
-
-<body>
-    <div id="map" style="width: 100%; height: 400px;"></div>
-    <script src="script.js"></script>
-</body>
-
-</html>
-`)
 
 app.listen(port, () => {
     console.log(`app running on port ${port}`)

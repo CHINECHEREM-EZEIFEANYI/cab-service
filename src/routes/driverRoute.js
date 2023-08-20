@@ -1,6 +1,6 @@
 const express = require('express');
-const router = express.Router();
-const {authUser, authRole} = require('.../basicAuth')
+const router = express();
+const { authUser, authRole } = require('.../basicAuth')
 
 
 router.get("/", function (req, res) {
@@ -48,4 +48,4 @@ router.get("/driver/logout", (req, res) => {
 });
 router.post("/driver/passwordreset", ResetPassword)
 
-module.export = { router}
+module.export = { router }
