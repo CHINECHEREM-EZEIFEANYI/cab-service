@@ -19,9 +19,7 @@ const accessToken =
   "pk.eyJ1Ijoic29zYXJpc3RpYyIsImEiOiJjbGxmNm9qaHcwcTU3M2RuMXJuemdhY3FvIn0.UGsqZ4uDjRxlXs68ImhqjA";
 
 export default function Map({ initialCoordinates }) {
-  const [journeyData, setJourneyData] = useState(null);
-  const { coordinates, error } = useDeviceLocation();
-  console.log(error);
+  const [journeyData, setJourneyData] = useState({ distance: 0, duration: 0 });
   const geoControlRef = useRef();
 
   const [start, setStart] = useState([initialCoordinates.longitude, initialCoordinates.latitude]);
@@ -34,12 +32,6 @@ export default function Map({ initialCoordinates }) {
   useEffect(() => {
     getDirections(endCoords);
   }, [start]);
-
-  useEffect(() => {
-    if (coordinates != null) {
-      setStart([coordinates.longitude, coordinates.latitude]);
-    }
-  }, [coordinates]);
 
   useEffect(() => {
     // Activate as soon as the control is loaded

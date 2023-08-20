@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, useLayoutEffect } from "react";
+import { useState, useEffect } from "react";
 
 function useDeviceLocation() {
   const [coordinates, setCoordinates] = useState(null);
@@ -18,7 +18,7 @@ function useDeviceLocation() {
           const longitude = position.coords.longitude;
           console.log(latitude);
           setCoordinates({ latitude, longitude });
-          setError(null); // Clear any previous errors
+          setError(null);
         },
         function (error) {
           if (error.code === 1) {
