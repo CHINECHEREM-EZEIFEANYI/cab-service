@@ -36,6 +36,12 @@ export default function page() {
   }, [start]);
 
   useEffect(() => {
+    if (coordinates != null) {
+      setStart([coordinates.longitude, coordinates.latitude]);
+    }
+  }, [coordinates]);
+
+  useEffect(() => {
     // Activate as soon as the control is loaded
     geoControlRef.current?.trigger();
   }, [geoControlRef.current]);
@@ -120,7 +126,12 @@ export default function page() {
           </Source>
 
           <NavigationControl />
-          <GeolocateControl trackUserLocation showUserLocation onGeolocate={handleLocateUser} />
+          <GeolocateControl
+            ref={geoControlRef}
+            trackUserLocation
+            showUserLocation
+            onGeolocate={handleLocateUser}
+          />
           <FullscreenControl />
           {/* <Popup longitude={longitude} latitude={latitude} anchor="top"></Popup> */}
         </ReactMapGl>
