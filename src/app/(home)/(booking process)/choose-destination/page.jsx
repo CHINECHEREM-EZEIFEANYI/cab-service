@@ -15,7 +15,6 @@ import Geocoder from "./Geocoder";
 import { useAppContext } from "@/context/AppContext";
 import axios from "axios";
 import useDeviceLocation from "@/hooks/useDeviceLocation";
-import Map from "./Map";
 
 const accessToken =
   "pk.eyJ1Ijoic29zYXJpc3RpYyIsImEiOiJjbGxmNm9qaHcwcTU3M2RuMXJuemdhY3FvIn0.UGsqZ4uDjRxlXs68ImhqjA";
@@ -23,12 +22,9 @@ export default function page() {
   const { coordinates, error } = useDeviceLocation();
   const geoControlRef = useRef();
   const mapRef = useRef();
-  const {
-    location: { latitude, longitude },
-    setLocation,
-  } = useAppContext();
-  const [start, setStart] = useState([7.4112677, 6.8654786]);
-  const [endCoords, setEndCoords] = useState([7.4112677, 6.8654786]);
+
+  const [start, setStart] = useState([7.373266, 6.842942]);
+  const [endCoords, setEndCoords] = useState([7.373266, 6.842942]);
   const [coords, setCoords] = useState([]);
 
   useEffect(() => {
@@ -85,10 +81,32 @@ export default function page() {
     },
   };
 
+  const endPoint = {
+    type: "Feature",
+    properties: {},
+    geometry: {
+      type: "Point",
+      coordinates: [...endCoords],
+    },
+  };
+
+  const layerEndPoint = {
+    id: "end",
+    type: "circle",
+    source: {
+      type: "geojson",
+      data: endCoords,
+    },
+    paint: {
+      "circle-radius": 10,
+      "circle-color": "#facc15",
+    },
+  };
+
   const handleMapClicked = (e) => {
     const values = e.lngLat;
     const arrValues = Object.values(values);
-    console.log(arrValues);
+
     setEndCoords(arrValues);
     getDirections(arrValues);
   };
@@ -113,16 +131,19 @@ export default function page() {
           initialViewState={{ latitude: start[0], longitude: start[1], zoom: 12 }}
           mapStyle="mapbox://styles/mapbox/streets-v9"
         >
-          <Geocoder setLocation={setLocation} />
+          {/* <Geocoder setLocation={setLocation} /> */}
           <Marker
-            latitude={start[1]}
-            longitude={start[0]}
+            latitude={endCoords[1]}
+            longitude={endCoords[0]}
             draggable
             onDragEnd={(e) => setStart([e.lngLat.lng, e.lngLat.lat])}
           />
 
           <Source id="routeSource" type="geojson" data={geojson}>
             <Layer {...lineStyle} />
+          </Source>
+          <Source id="end" type="geojson" data={endPoint}>
+            <Layer {...layerEndPoint} />
           </Source>
 
           <NavigationControl />
