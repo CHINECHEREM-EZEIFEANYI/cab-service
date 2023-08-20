@@ -1,9 +1,10 @@
-const { DriverStatus } = require('@/config/enum');
-const mongoose = require('mongoose');
+const { DriverStatus } = require("@/config/enum");
+const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-const userModel = mongoose.model('user', userSchema);
+const userModel = mongoose.model("user", userSchema);
 
-const userSchema = new mongoose.Schema({
+const userSchema = new mongoose.Schema(
+  {
     FirstName: String,
     LastName: String,
     email: String,
@@ -13,61 +14,63 @@ const userSchema = new mongoose.Schema({
     car: Object,
     availability: Boolean,
     currentLocation: {
-        longitude: String,
-        latitude: String,
-        address : String
+      longitude: String,
+      latitude: String,
+      address: String,
     },
     Locations: [
-        {
-            longitude: String,
-            latitude: String,
-            address: String  
-        }
+      {
+        longitude: String,
+        latitude: String,
+        address: String,
+      },
     ],
     password: String,
     isDriverApproved: {
-        type: Boolean,
-        default: false
+      type: Boolean,
+      default: false,
     },
     driverStatus: {
-        type: String,
-        enu: Object.value(DriverStatus),
-        default: DriverStatus.PENDING
+      type: String,
+      enu: Object.value(DriverStatus),
+      default: DriverStatus.PENDING,
     },
-},{
-    timestamps : true
-}
+  },
+  {
+    timestamps: true,
+  }
 );
 
-const ratingSchema = new mongoose.Schema({
-    driver: { type: mongoose.Schema.ObjectId.ObjectId, ref: 'user' },
-    passenger: { type: mongoose.Schema.ObjectId.ObjectId, ref: 'user' },
+const ratingSchema = new mongoose.Schema(
+  {
+    driver: { type: mongoose.Schema.ObjectId.ObjectId, ref: "user" },
+    passenger: { type: mongoose.Schema.ObjectId.ObjectId, ref: "user" },
     stars: Number,
     review: {
-        star: Number,
-        feedback: String,
-    }
-},
-    {
-        timestamps: true
-    })
-const rideSchema = new mongoose.Schema({
-    driver: { type: mongoose.Schema.ObjectId.ObjectId, ref: 'user' },
-    passenger: { type: mongoose.Schema.ObjectId.ObjectId, ref: 'user' },
+      star: Number,
+      feedback: String,
+    },
+  },
+  {
+    timestamps: true,
+  }
+);
+const rideSchema = new mongoose.Schema(
+  {
+    driver: { type: mongoose.Schema.ObjectId.ObjectId, ref: "user" },
+    passenger: { type: mongoose.Schema.ObjectId.ObjectId, ref: "user" },
     pickupLocation: {
-        longitude: String,
-        latitude: String,
-        address: String 
+      longitude: String,
+      latitude: String,
+      address: String,
     },
     destination: {
-        longitude: String,
-        latitude: String,
-        address: String 
+      longitude: String,
+      latitude: String,
+      address: String,
     },
-    
-}, {
-    timestamps: true
-}
-)
-
-
+  },
+  {
+    timestamps: true,
+  }
+);
