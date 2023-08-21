@@ -121,7 +121,7 @@ export default function Map({ initialCoordinates }) {
 
   return (
     <div className="relative">
-      <BookingReview journeyData={journeyData} />
+      <BookingReview journeyData={journeyData} setSteps={setSteps} />
       <div className="w-screen h-[85vh] lg:h-[30rem] lg:w-full mx-auto ">
         <ReactMapGl
           onClick={handleMapClicked}
@@ -131,8 +131,8 @@ export default function Map({ initialCoordinates }) {
         >
           {/* <Geocoder setLocation={setLocation} /> */}
           <Marker
-            latitude={endCoords[1]}
-            longitude={endCoords[0]}
+            latitude={start[1]}
+            longitude={start[0]}
             draggable
             onDragEnd={(e) => setStart([e.lngLat.lng, e.lngLat.lat])}
           />

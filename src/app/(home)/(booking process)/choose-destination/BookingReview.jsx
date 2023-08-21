@@ -2,8 +2,10 @@ import React from "react";
 import { addSeconds, intervalToDuration } from "date-fns";
 import { FaCar } from "react-icons/fa";
 import { GiMoneyStack, GiTimeBomb } from "react-icons/gi";
+import { MdCalendarMonth } from "react-icons/md";
+import { TimePicker } from "@/components/ui";
 
-export default function BookingReview({ journeyData }) {
+export default function BookingReview({ journeyData, setSteps }) {
   if (journeyData.duration == 0) {
     return (
       <div className="absolute top-10 left-4 z-[1] bg-white h-[5rem] py-4 px-2 rounded-md">
@@ -81,7 +83,17 @@ export default function BookingReview({ journeyData }) {
           {formattedAmount}
         </p>
       </div>
-      <button className="h-[2.5rem] w-full bg-primary text-white font-[600] px-4 flex items-center justify-center rounded-md mt-2">
+      <div className="flex items-center gap-2">
+        <span className="text-primary text-lg font-[600]">
+          <MdCalendarMonth />
+        </span>
+        <TimePicker />
+      </div>
+
+      <button
+        className="h-[2.5rem] w-full bg-primary text-white font-[600] px-4 flex items-center justify-center rounded-md mt-2"
+        onClick={() => setSteps(3)}
+      >
         Book Ride
       </button>
     </div>

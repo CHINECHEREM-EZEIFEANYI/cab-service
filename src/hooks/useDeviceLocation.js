@@ -11,6 +11,7 @@ function useDeviceLocation() {
   }, []);
 
   useEffect(() => {
+    console.log("getting device location");
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         function (position) {

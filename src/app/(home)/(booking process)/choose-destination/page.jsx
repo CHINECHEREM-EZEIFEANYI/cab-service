@@ -7,14 +7,13 @@ import { BsNutFill } from "react-icons/bs";
 
 export default function page() {
   const { coordinates, error } = useDeviceLocation();
+  const [steps, setSteps] = useState(1);
 
   useEffect(() => {
     if (coordinates != null) {
       setSteps(2);
     }
   }, [coordinates]);
-
-  const [steps, setSteps] = useState(1);
 
   return (
     <section className="relative">
@@ -23,7 +22,7 @@ export default function page() {
           <Loader />
         </div>
       ) : steps == 2 ? (
-        <Map initialCoordinates={coordinates} />
+        <Map initialCoordinates={coordinates} setSteps={setSteps} />
       ) : (
         <div>Success</div>
       )}
