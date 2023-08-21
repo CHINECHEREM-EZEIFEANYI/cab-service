@@ -4,10 +4,10 @@ const app = express();
 const bodyParser = require("body-parser");
 const port = process.env.PORT || 8000;
 const session = require("express-session");
-const { authUser, authRole } = require("./src/basicAuth");
 const { v4: uuidv4 } = require("uuid");
-const apiKey = process.env.API_KEY;
+const morgan = require('morgan');
 
+app.use(morgan('tiny'))
 app.use(
     session({
         genid: function (req) {
@@ -23,9 +23,9 @@ app.use(bodyParser.json());
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
-app.use("/api", require("./src/routes/adminRoute"));
-app.use("/api", require("./src/routes/driverRoute"));
-app.use("/api", require("./src/routes/userRoute"));
+app.use("/api/admin", require("./src/routes/adminRoute"));
+app.use("/api/driver", require("./src/routes/driverRoute"));
+app.use("/api/users", require("./src/routes/userRoute"));
 
 
 app.listen(port, () => {

@@ -8,17 +8,17 @@ const {
 } = require("../controllers/controller");
 const passport = require("../passportconfig");
 
-router.get("/", function (req, res) {
+router.get("/index", function (req, res) {
   res.render("index");
 });
 
 router.get("/signUp", function (req, res) {
-  res.render("page.jsx");
+  res.render("signUp");
 });
 router.get("/login", function (req, res) {
   res.render("login");
 });
-router.get("/driver/dashboard", authUser, function (req, res) {
+router.get("/dashboard", authUser, function (req, res) {
   res.render("driverdashboard", { user: req.user.name });
 });
 router.post("/driver/register", registerUser, (req, res) => {
@@ -30,7 +30,7 @@ router.post("/driver/register", registerUser, (req, res) => {
   }
 });
 // router.post(
-//     "/driver/login",
+//     /login",
 //     passport.authenticate("local", {
 //         successRedirect: "/driver/dashboard",
 //         failureRedirect: "/driver/login",
@@ -48,15 +48,15 @@ router.get("/booking/:id", authUser, (req, res) => {
 });
 
 //reset password routes
-router.get("/driver/passwordreset", (req, res) => {
+router.get("/passwordreset", (req, res) => {
   res.render("passwordreset");
 });
-router.get("/driver/logout", (req, res) => {
+router.get("/logout", (req, res) => {
   //req.logOut();
   // req.flash("success_msg", "you have logged out");
-  res.redirect("/users/login");
+  res.redirect("/login");
   console.log("test");
 });
-router.post("/driver/passwordreset", ResetPassword);
+router.post("/passwordreset", ResetPassword);
 
 module.exports = router;

@@ -12,14 +12,17 @@ function authUser(req, res, next) {
   next();
 }
 function authRole(req, res, next) {
-  if (req.user.role != "Admin") {
+  console.log("req.user:", req.user); // Debugging line
+  if (req.user && req.user.role === "Admin") {
+    next();
+  } else {
     req.flash(
       "success_msg",
       "Access denied, Login with Admin credentials to gain access"
     );
     res.redirect("/login");
   }
-  next();
 }
+
 
 module.exports = { authUser, authRole };

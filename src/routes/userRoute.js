@@ -8,18 +8,18 @@ const { registerUser, ResetPassword, UpdatePassword } = require ('../controllers
 urouter.get("/index", (req, res) => {
     res.render("index");
 });
-urouter.get("/users/register", (req, res) => {
+urouter.get("/register", (req, res) => {
     res.render("register");
 });
-urouter.get("/users/login", (req, res) => {
+urouter.get("/login", (req, res) => {
     res.render("login");
 });
 
-urouter.get("/users/dashboard", (req, res) => {
+urouter.get("/dashboard", (req, res) => {
     res.render("dashboard", { user: req.user.name });
 });
 
-urouter.post("/users/register", registerUser, (req, res) => {
+urouter.post("/register", registerUser, (req, res) => {
     if (err) {
         console.log(err);
         return res.status(500).json({ err });
@@ -28,7 +28,7 @@ urouter.post("/users/register", registerUser, (req, res) => {
     }
 });
 urouter.post(
-    "/users/login",
+    "/login",
     passport.authenticate("local", {
         successRedirect: "/users/dashboard",
         failureRedirect: "/users/login",
@@ -64,15 +64,15 @@ urouter.get('/booking/:id', authUser, (req, res) => {
 });
 
 //reset password routes
-urouter.get("/users/passwordreset", (req, res) => {
+urouter.get("/passwordreset", (req, res) => {
     res.render("passwordreset");
 });
-urouter.get("/users/logout", (req, res) => {
+urouter.get("/logout", (req, res) => {
     req.logOut();
     req.flash("success_msg", "you have logged out");
-    res.redirect("/users/login");
+    res.redirect("/login");
 });
-urouter.post("/users/passwordreset", ResetPassword)
+urouter.post("/passwordreset", ResetPassword)
 
 /*router.get("/users/newpasswordpage", (req, res) => {
     res.render("newpasswordpage", { token: req.query.token }
@@ -80,4 +80,4 @@ urouter.post("/users/passwordreset", ResetPassword)
 })
 router.post("/users/newpasswordpage", UpdatePassword);*/
 
-module.exports =  urouter 
+module.exports =  urouter
