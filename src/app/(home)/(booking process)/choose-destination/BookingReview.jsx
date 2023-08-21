@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import { addSeconds, intervalToDuration } from "date-fns";
 import { FaCar } from "react-icons/fa";

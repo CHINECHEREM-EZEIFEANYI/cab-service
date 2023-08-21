@@ -1,3 +1,4 @@
+"use client";
 import React from "react";
 import "flatpickr/dist/themes/material_green.css";
 
