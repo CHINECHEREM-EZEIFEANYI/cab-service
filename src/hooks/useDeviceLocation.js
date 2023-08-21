@@ -11,13 +11,12 @@ function useDeviceLocation() {
   }, []);
 
   useEffect(() => {
-    console.log("getting device location");
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         function (position) {
           const latitude = position.coords.latitude;
           const longitude = position.coords.longitude;
-          console.log(latitude);
+
           setCoordinates({ latitude, longitude });
           setError(null);
         },

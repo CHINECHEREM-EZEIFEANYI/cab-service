@@ -2,8 +2,8 @@
 import useDeviceLocation from "@/hooks/useDeviceLocation";
 import Map from "./Map";
 import { Loader } from "@/components/ui";
+import Success from "./Success";
 import { useEffect, useState } from "react";
-import { BsNutFill } from "react-icons/bs";
 
 export default function page() {
   const { coordinates, error } = useDeviceLocation();
@@ -24,7 +24,7 @@ export default function page() {
       ) : steps == 2 ? (
         <Map initialCoordinates={coordinates} setSteps={setSteps} />
       ) : (
-        <div>Success</div>
+        <Success />
       )}
     </section>
   );
