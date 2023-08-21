@@ -5,7 +5,7 @@ const {
   registerUser,
   ResetPassword,
   updatePassword,
-} = require("../controllers/controller");
+} = require("../controllers/Usercontroller");
 const passport = require("../passportconfig");
 
 router.get("/", function (req, res) {

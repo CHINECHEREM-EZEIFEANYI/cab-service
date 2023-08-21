@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const urouter = express.Router();
 const passport = require("passport");
 const {authUser, authRole} = require("../basicAuth")
-const { registerUser, ResetPassword, UpdatePassword } = require ('../controllers/controller')
+const { registerUser, ResetPassword, UpdatePassword } = require ('../controllers/Usercontroller')
 
 urouter.get("/index", (req, res) => {
     res.render("index");
