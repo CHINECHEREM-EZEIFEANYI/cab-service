@@ -1,11 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { authUser, authRole } = require("../basicAuth");
-const {
-  registerUser,
-  ResetPassword,
-  updatePassword,
-} = require("../controllers/controller");
+
 const passport = require("../passportconfig");
 
 router.get("/index", function (req, res) {
@@ -18,10 +13,10 @@ router.get("/signUp", function (req, res) {
 router.get("/login", function (req, res) {
   res.render("login");
 });
-router.get("/dashboard", authUser, function (req, res) {
+router.get("/dashboard",  function (req, res) {
   res.render("driverdashboard", { user: req.user.name });
 });
-router.post("/driver/register", registerUser, (req, res) => {
+router.post("/driver/register",  (req, res) => {
   if (err) {
     console.log(err);
     return res.status(500).json({ err });
@@ -37,7 +32,7 @@ router.post("/driver/register", registerUser, (req, res) => {
 //         failureFlash: true,
 //     })
 // );
-router.get("/booking/:id", authUser, (req, res) => {
+router.get("/booking/:id",  (req, res) => {
   const bookingId = req.params.id;
   res.json({
     id: bookingId,
@@ -57,6 +52,6 @@ router.get("/logout", (req, res) => {
   res.redirect("/login");
   console.log("test");
 });
-router.post("/passwordreset", ResetPassword);
+router.post("/passwordreset");
 
 module.exports = router;

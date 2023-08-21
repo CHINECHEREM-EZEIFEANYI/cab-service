@@ -1,3 +1,4 @@
+const {isAdmin } = require("../middleware/auth");
 const { default: mongoose } = require("mongoose");
 
 const userSchema = new mongoose.Schema({
@@ -13,6 +14,7 @@ const userSchema = new mongoose.Schema({
     rating: Object,
     currentlocation: Object,
     dateCreated: Date,
-    updateDate: Date
+    updateDate: Date,
+    isAdmin : Boolean
 });
 exports.userModel = mongoose.model('user', userSchema);

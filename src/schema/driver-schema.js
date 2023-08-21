@@ -25,6 +25,10 @@ const userSchema = new mongoose.Schema(
         address: String,
       },
     ],
+    isAdmin: {
+      type: Boolean,
+      default: false,
+    },
     password: String,
     isDriverApproved: {
       type: Boolean,
@@ -55,6 +59,9 @@ const ratingSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+const rating = mongoose.model('rate', ratingSchema);
+
+
 const rideSchema = new mongoose.Schema(
   {
     driver: { type: mongoose.Schema.ObjectId.ObjectId, ref: "user" },
@@ -74,3 +81,6 @@ const rideSchema = new mongoose.Schema(
     timestamps: true,
   }
 );
+const ride = mongoose.model('Ride', rideSchema);
+
+module.exports = { rating, ride }

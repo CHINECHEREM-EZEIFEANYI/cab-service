@@ -1,23 +1,23 @@
 const { approvedDriver, deleteDriver, viewUser, viewDriver, getBookings } = require('../controllers/admin')
 const express = require("express");
 const adminrouter = express.Router();
-const {  authRole } = require("../basicAuth")
+
 
 
 
 //adding new driver
-adminrouter.post('/new', authRole, approvedDriver);
+adminrouter.post('/new', approvedDriver);
 
 //deleting to-do from the list
-adminrouter.delete('/delete/:id', authRole, deleteDriver)
+adminrouter.delete('/delete/:id', deleteDriver)
 
 //rendering userpages
-adminrouter.get('/viewuser', authRole, viewUser);
+adminrouter.get('/viewuser',  viewUser);
 
 //viewing drivers in the db
-adminrouter.get('/viewdriver', authRole,  viewDriver);
+adminrouter.get('/viewdriver',   viewDriver);
 //viewing bookings in the db
-adminrouter.get('/getBookings', authRole, getBookings);
+adminrouter.get('/getBookings',  getBookings);
 
 
 module.exports = adminrouter
