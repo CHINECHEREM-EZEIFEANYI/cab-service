@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 
 export default function page() {
   const { coordinates, error } = useDeviceLocation();
-  const [steps, setSteps] = useState(1);
+  const [steps, setSteps] = useState(3);
 
   useEffect(() => {
     if (coordinates != null) {
