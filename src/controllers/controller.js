@@ -1,5 +1,5 @@
-const mongoose = require('mongoose');
 const bcrypt = require('bcrypt')
+const genAuthToken = require("../utils/genAuthToken");
 var randtoken = require("rand-token");
 const nodemailer = require("nodemailer");
 
@@ -29,127 +29,35 @@ mail.sendMail(mailOptions, function (error, info) {
     }
 });
 
-exports.registerUser = async function (req, res) {
-    const {
-        name,
-        email,
-        role,
-        password,
-        password2
-    } = req.body;
+exports.registerUser = async(req, res)=> {
+    let user = await User.findOne({ email: req.body.email });
+  if (user) return res.status(400).send(" User with this email exist... ");
 
-    console.log({
-        name,
-        email,
-        role,
-        password,
-        password2,
-    });
+  const { name, email, password } = req.body;
 
-    let errs = [];
-    if (password.length < 6) {
-        errs.push({
-            message: "password should be atleast 6 characters"
-        });
-    }
-    if (password != password2) {
-        errs.push({
-            message: " passwords do not match"
-        });
-    }
-    if (errs.length > 0) {
-        res.render("signup", {
-            errs
-        });
-    } else {
-        //Form validation successful
-        let hashedPassword = await bcrypt.hash(password, 10);
-        console.log(hashedPassword);
-
-        exports.CheckEmailAndRegister = function (name, email, role, hashedPassword, req, res) {
-            const usersCollection = db.collection('users');
-            // Check if the email already exists in the "users" collection
-            usersCollection.findOne({ email }, (err, existingUser) => {
-                if (err) {
-                    throw err;
-                }
-                if (existingUser) {
-                    const errs = [{ message: 'Email already exists' }];
-                    return res.render('signup', { errs });
-                } else {
-                    // Email does not exist, proceed with user registration
-                    const newUser = {
-                        name: name,
-                        email: email,
-                        role: role,
-                        password: hashedPassword
-                    };
-                    // Insert the new user document into the "users" collection
-                    usersCollection.insertOne(newUser, (err, result) => {
-                        if (err) {
-                            throw err;
-                        }
-                        console.log("Registration successful");
-
-                        req.flash('success_msg', 'You are now registered. Please log in.');
-                        res.redirect('/login');
-                    });
-                }
-            });
-        };
-    };
-}
-
-exports.ResetPassword = function (req, res) {
-    var email = req.body.email;
-    console.log(email);
-    const usersCollection = db.collection('users');
-
-    usersCollection.findOne({ email: email }, (err, user) => {
-        if (err) {
-            throw err;
-        }
-
-        if (user) {
-            const token = randtoken.generate(10);
-            sendEmail(email, token, (sendErr, sent) => {
-                if (sendErr) {
-                    throw sendErr;
-                }
-
-                if (sent !== "mailing error") {
-                    const data = { token: token };
-
-                    usersCollection.updateOne(
-                        { _id: ObjectId(user._id) },
-                        { $set: { token: data.token } },
-                        (updateErr, updateResult) => {
-                            if (updateErr) {
-                                throw updateErr;
-                            }
-
-                            console.log(updateResult);
-
-                            req.flash(
-                                "success_msg",
-                                "Your Password Reset link has been sent to your email"
-                            );
-                            res.render("index");
-
-                        }
-                    );
-                } else {
-                    req.flash("error", "Something went wrong, please try again");
-                    res.render("passwordreset");
-                }
-            });
-        } else {
-            req.flash("error", "Email doesn't exist");
-            res.render("passwordreset");
-            console.log(res.headersSent)
-        }
-    });
+  user = new User({
+    name: name,
+    email: email,
+    password: password,
+  });
+  user.password = await bcrypt.hash(user.password, 10);
+  user = await user.save();
+  const token = genAuthToken(user);
+  res.send(token);
+   
 };
+
+//login user controller
+exports.LoginUser = async (req, res) => {
+  const { email, password } = req.body;
+  let user = await User.findOne({ email: email });
+  if (!user) return res.status(400).send(" Invalid Email or Password ");
+  const isValid = await bcrypt.compare(password, user.password);
+  if (!isValid) return res.status(400).send(" Invalid Email or Password ");
+  const token = genAuthToken(user);
+  res.send(token);
+};
+
 exports.updatePassword = function (req, res) {
     const { token, password, password2 } = req.body;
     console.log({
