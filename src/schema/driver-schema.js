@@ -1,7 +1,6 @@
-const { DriverStatus } = require("@/config/enum");
+const { DriverStatus } = require("../config/enum");
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
-const userModel = mongoose.model("user", userSchema);
 
 const userSchema = new mongoose.Schema(
   {
@@ -83,4 +82,4 @@ const rideSchema = new mongoose.Schema(
 );
 const ride = mongoose.model('Ride', rideSchema);
 
-module.exports = { rating, ride }
+module.exports = { rating, ride , user }
