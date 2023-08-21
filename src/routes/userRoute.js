@@ -1,40 +1,27 @@
 const express = require('express');
-const bodyParser = require('body-parser');
 const urouter = express.Router();
-const passport = require("passport");
+const validatorMiddleware = require('../middleware/validationmiddleware')
+const AuthValidator = require('../validators/authvalidator')
 const {authUser, authRole} = require("../basicAuth")
-const { registerUser, ResetPassword, UpdatePassword } = require ('../controllers/Usercontroller')
+const { registerUser, ResetPassword, UpdatePassword } = require ('../controllers/controller')
 
-urouter.get("/index", (req, res) => {
-    res.render("index");
-});
-urouter.get("/users/register", (req, res) => {
-    res.render("register");
-});
-urouter.get("/users/login", (req, res) => {
-    res.render("login");
-});
 
 urouter.get("/users/dashboard", (req, res) => {
     res.render("dashboard", { user: req.user.name });
 });
 
-urouter.post("/users/register", registerUser, (req, res) => {
-    if (err) {
-        console.log(err);
-        return res.status(500).json({ err });
-    } else {
-        res.render("login");
-    }
-});
+urouter.post(
+    "/users/register", 
+    validatorMiddleware(AuthValidator.Registerschema, "body"),
+    registerUser
+);
+
 urouter.post(
     "/users/login",
-    passport.authenticate("local", {
-        successRedirect: "/users/dashboard",
-        failureRedirect: "/users/login",
-        failureFlash: true,
-    })
-);
+    validatorMiddleware(AuthValidator.Loginschema, "body"),
+    LoginUser
+)
+
 // Endpoint for requesting a cab booking
 urouter.post('/booking', authUser, (req, res) => {
     const { origin, destination, passengerCount } = req.body;
