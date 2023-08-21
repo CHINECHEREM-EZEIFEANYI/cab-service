@@ -93,7 +93,7 @@ export default function BookingReview({ journeyData, setSteps }) {
 
       <button
         className="h-[2.5rem] w-full bg-primary text-white font-[600] px-4 flex items-center justify-center rounded-md mt-2"
-        onClick={() => setSteps(3)}
+        onClick={() => setSteps(2)}
       >
         Book Ride
       </button>

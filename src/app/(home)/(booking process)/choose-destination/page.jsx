@@ -11,20 +11,20 @@ export default function page() {
 
   useEffect(() => {
     if (coordinates != null) {
-      setSteps(2);
+      setSteps(1);
     }
   }, [coordinates]);
 
   return (
     <section className="relative">
       {steps == 1 ? (
+        <Map initialCoordinates={coordinates} setSteps={setSteps} />
+      ) : steps == 2 ? (
+        <Success />
+      ) : (
         <div className="min-h-screen min-w-screen flex items-center justify-center">
           <Loader />
         </div>
-      ) : steps == 2 ? (
-        <Map initialCoordinates={coordinates} setSteps={setSteps} />
-      ) : (
-        <Success />
       )}
     </section>
   );
