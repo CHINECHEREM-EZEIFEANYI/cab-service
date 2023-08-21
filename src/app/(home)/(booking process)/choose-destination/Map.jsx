@@ -18,7 +18,7 @@ import BookingReview from "./BookingReview";
 const accessToken =
   "pk.eyJ1Ijoic29zYXJpc3RpYyIsImEiOiJjbGxmNm9qaHcwcTU3M2RuMXJuemdhY3FvIn0.UGsqZ4uDjRxlXs68ImhqjA";
 
-export default function Map({ initialCoordinates }) {
+export default function Map({ initialCoordinates, setSteps }) {
   const [journeyData, setJourneyData] = useState({ distance: 0, duration: 0 });
   const geoControlRef = useRef();
 
