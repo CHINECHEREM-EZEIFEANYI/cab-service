@@ -1,5 +1,10 @@
 import React from "react";
 
 export default function page() {
-  return <div>Profile page</div>;
+  return (
+    <div>
+      <p>Profile page</p>
+      <button>toogle Offline</button>
+    </div>
+  );
 }

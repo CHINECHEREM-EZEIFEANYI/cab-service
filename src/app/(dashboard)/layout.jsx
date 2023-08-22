@@ -13,6 +13,7 @@ export default function layout({ children }) {
               Swift<span className="text-primary">Rides</span>
             </p>
           </Link>
+
           <button className="ml-auto border md:hidden border-primary text-primary py-1 px-2 rounded-md font-[600] font-jost">
             Logout
           </button>
