@@ -1,20 +1,16 @@
-//db.js
-require('dotenv').config();
+require("dotenv").config();
 const mongoose = require('mongoose')
 
-const url = `mongodb + srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.vc86snd.mongodb.net/?retryWrites=true&w=majority`;
+const url = process.env.DB_URL;
 
-const connectionParams = {
+mongoose.connect(url, {
     useNewUrlParser: true,
-    useCreateIndex: true,
-    useUnifiedTopology: true
-}
-mongoose.connect(url, connectionParams)
+    useUnifiedTopology: true })
     .then(() => {
-        console.log('Connected to database ')
+        console.log('Databse connected successfully ')
     })
     .catch((err) => {
-        console.error(`Error connecting to the database. \n${err}`)
+        console.error(`Error connecting to the database.`, err.message)
     });
 
     

@@ -1,12 +1,13 @@
-// const {user} = require("../model/user")
-const {ride, rating, user } = require ('../schema/driver-schema')
+const mongoose = require('mongoose');
+const User = require('../schema/driver-schema'); // Import the schema
+const {ride, rating, } = require ('../schema/driver-schema')
 const bcrypt = require("bcrypt");
 const genAuthToken = require("../utils/genAuthToken")
 
 
 exports.LoginUser = async (req, res) => {
     const { email, password } = req.body;
-    let user = await user.findOne({ email: email });
+    let user = await User.findOne({ email: email });
     if (!user) return res.status(400).send(" Invalid Email or Password ");
     const isValid = await bcrypt.compare(password, user.password);
     if (!isValid) return res.status(400).send(" Invalid Email or Password ");
@@ -14,15 +15,18 @@ exports.LoginUser = async (req, res) => {
     res.send(token);
 };
 exports.RegisterUser = async (req, res) => {
-    let user = await user.findOne({ email: req.body.email });
+    let user = await User.findOne({ email: req.body.email });
     if (user) return res.status(400).send(" User with this email exist... ");
 
-    const { name, email, password } = req.body;
+    const { FirstName, LastName, email, password , phonenumber } = req.body;
 
     user = new User({
-        name: name,
+        FirstName: FirstName,
+        LastName: LastName,
         email: email,
         password: password,
+        phonenumber: phonenumber 
+        
     });
     user.password = await bcrypt.hash(user.password, 10);
     user = await user.save();
@@ -32,8 +36,8 @@ exports.RegisterUser = async (req, res) => {
 exports.Bookride = async (req, res) => {
     const {driverId, passengerId, origin, destination} = req.body
 try {
-    const driver = await user.findById(driverId);
-    const passenger = await user.findById(passengerId);
+    const driver = await User.findById(driverId);
+    const passenger = await User.findById(passengerId);
 if (!driver || !passenger) {
     return res.status(404).send('Driver or passenger not found');
     }
@@ -55,7 +59,7 @@ exports.RateRide = async (req, res) => {
     const { email, password, rideId, stars, feedback } = req.body;
 
     try {
-        const user = await user.findOne({ email: email });
+        const user = await User.findOne({ email: email });
 
         if (!user) {
             return res.status(400).send('Invalid Email or Password');
@@ -88,7 +92,7 @@ exports.CancelRide = async (req, res) => {
     const { email, password, rideId } = req.body;
 
     try {
-        const user = await user.findOne({ email: email });
+        const user = await User.findOne({ email: email });
 
         if (!user) {
             return res.status(400).send('Invalid Email or Password');

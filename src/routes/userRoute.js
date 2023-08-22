@@ -8,7 +8,7 @@ const { LoginUser, RegisterUser, Bookride, RateRide, CancelRide } = require("../
 
 urouter.get("/dashboard", );
 
-urouter.post("/register", isUser, RegisterUser );
+urouter.post("/register",isUser, RegisterUser );
 urouter.post("/login", isUser, LoginUser );
 // Endpoint for requesting a cab booking
 urouter.post('/booking',isUser, Bookride );
