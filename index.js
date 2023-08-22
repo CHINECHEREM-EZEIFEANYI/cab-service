@@ -38,25 +38,7 @@ app.use("/api/users", require("./src/routes/userRoute"));
 app.listen(port, () => {
   console.log(`app running on port ${port}`);
 });
-const url = 'mongodb://localhost:27017';
 
-// Database Name
-const dbName = 'mydatabase';
-
-// Create a new MongoClient
-const client = new MongoClient(url, { useNewUrlParser: true, useUnifiedTopology: true });
-
-// Connect to the server
-client.connect((err) => {
-  if (err) {
-    console.error('Error connecting to MongoDB:', err);
-    return;
-  }
-  console.log('Connected successfully to MongoDB');
-
-
-  client.close();
-});
 
 
 
