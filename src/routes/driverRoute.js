@@ -7,7 +7,7 @@ const { LoginUser, RegisterUser, Bookride, RateRide, CancelRide } = require("../
 
 router.get("/dashboard",);
 
-router.post("/register", isUser, RegisterUser);
+router.post("/register", RegisterUser);
 router.post("/login", isUser, LoginUser);
 
 // Endpoint for canceling a cab booking
