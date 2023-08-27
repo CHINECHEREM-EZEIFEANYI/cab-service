@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const User = require('../schema/driver-schema'); // Import the schema
 const {ride, rating, } = require ('../schema/driver-schema')
-const bcrypt = require("bcrypt");
+const bcryptjs = require('bcryptjs')
 const genAuthToken = require("../utils/genAuthToken")
 
 
@@ -9,7 +9,7 @@ exports.LoginUser = async (req, res) => {
     const { email, password } = req.body;
     let user = await User.findOne({ email: email });
     if (!user) return res.status(400).send(" Invalid Email or Password ");
-    const isValid = await bcrypt.compare(password, user.password);
+    const isValid = await bcryptjs.compare(password, user.password);
     if (!isValid) return res.status(400).send(" Invalid Email or Password ");
     const token = genAuthToken(user);
     res.send(token);
@@ -28,7 +28,7 @@ exports.RegisterUser = async (req, res) => {
         phonenumber: phonenumber 
         
     });
-    user.password = await bcrypt.hash(user.password, 10);
+    user.password = await bcryptjs.hash(user.password, 10);
     user = await user.save();
     const token = genAuthToken(user);
     res.send(token);
@@ -65,7 +65,7 @@ exports.RateRide = async (req, res) => {
             return res.status(400).send('Invalid Email or Password');
         }
 
-        const isValid = await bcrypt.compare(password, user.password);
+        const isValid = await bcryptjs.compare(password, user.password);
 
         if (!isValid) {
             return res.status(400).send('Invalid Email or Password');
@@ -98,7 +98,7 @@ exports.CancelRide = async (req, res) => {
             return res.status(400).send('Invalid Email or Password');
         }
 
-        const isValid = await bcrypt.compare(password, user.password);
+        const isValid = await bcryptjs.compare(password, user.password);
 
         if (!isValid) {
             return res.status(400).send('Invalid Email or Password');

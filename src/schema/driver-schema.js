@@ -33,8 +33,8 @@ const userSchema = new mongoose.Schema({
   },
 
   phoneNumber: {
-    type: Number,
-    required: true
+    type: String,
+    required: false
   },
   age: Date,
   bio: String,
