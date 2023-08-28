@@ -31,7 +31,9 @@ const userSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
   },
-
+  driverStatus: {
+    type: String, enum : Object.values(DriverStatus), default : DriverStatus.PENDING
+},
   phoneNumber: {
     type: String,
     required: false

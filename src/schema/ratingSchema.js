@@ -1,8 +1,9 @@
 const mongoose = require("mongoose");
+const userModel = require ("./driver-schema")
 const ratingSchema = new mongoose.Schema(
     {
-        driver: { type: mongoose.Schema.ObjectId.ObjectId, ref: "user" },
-        passenger: { type: mongoose.Schema.ObjectId.ObjectId, ref: "user" },
+        driver: { type: mongoose.Schema.ObjectId.ObjectId, ref: "User" },
+        passenger: { type: mongoose.Schema.ObjectId.ObjectId, ref: "User" },
         stars: Number,
         review: {
             star: Number,
