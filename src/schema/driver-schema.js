@@ -2,6 +2,10 @@ const mongoose = require("mongoose");
 const { DriverStatus } = require("../config/enum");
 
 const userSchema = new mongoose.Schema({
+    accountType: {
+      type: String,
+      required: [true, "account type is required"],
+    },
   FirstName: {
     type: String,
     required: true,
@@ -17,15 +21,22 @@ const userSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
-    minlength: 3,
-    maxlength: 200,
+    minlength: 10,
+    maxlength: 60,
     unique: true,
   },
   password: {
     type: String,
     required: true,
-    minlength: 6,
-    maxlength: 1000,
+    minlength: 8,
+    maxlength: 25,
+  },
+  licenseNumber: {
+    type: String,
+    unique: [true, "license number is already taken"],
+  },
+  taxiType: {
+    type: String,
   },
   isAdmin: {
     type: Boolean,
@@ -38,11 +49,8 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: false
   },
-  age: Date,
-  bio: String,
-  car: Object,
   availability: Boolean,
-  rating: Object,
+  rating: { type: Number, min: 0, max: 5 },
   currentlocation: Object,
 
 }, { timestamps: true });
