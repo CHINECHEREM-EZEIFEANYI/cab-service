@@ -8,7 +8,7 @@ const adminrouter = express.Router();
 //adding new driver
 adminrouter.post('/new', approvedDriver);
 
-//deleting to-do from the list
+//deleting driver from the list
 adminrouter.delete('/delete/:id', deleteDriver)
 
 adminrouter.get('/getBookings',  getBookings);
