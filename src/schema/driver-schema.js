@@ -37,6 +37,7 @@ const userSchema = new mongoose.Schema({
   },
   taxiType: {
     type: String,
+    required: true,
   },
   isAdmin: {
     type: Boolean,
