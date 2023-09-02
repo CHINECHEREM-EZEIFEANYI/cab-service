@@ -29,7 +29,7 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
     minlength: 8,
-    maxlength: 25,
+    maxlength: 125,
   },
   licenseNumber: {
     type: String,
@@ -44,7 +44,7 @@ const userSchema = new mongoose.Schema({
     default: false,
   },
   driverStatus: {
-    type: String, enum : Object.values(DriverStatus), default : DriverStatus.PENDING
+    type: String, enum : Object.values(DriverStatus), default : DriverStatus.APPROVED
 },
   phoneNumber: {
     type: String,

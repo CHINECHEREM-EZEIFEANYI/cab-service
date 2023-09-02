@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const User = require('../schema/driver-schema'); // Import the schema
-const {ride, rating, } = require ('../schema/driver-schema')
+const {ride } = require ('../schema/driver-schema')
 const bcryptjs = require('bcryptjs')
 const genAuthToken = require("../utils/genAuthToken")
 
@@ -12,26 +12,32 @@ exports.LoginUser = async (req, res) => {
     const isValid = await bcryptjs.compare(password, user.password);
     if (!isValid) return res.status(400).send(" Invalid Email or Password ");
     const token = genAuthToken(user);
-    res.send(token);
+    res.status(201).json({ token, _id: user.id, email: email, message : "Logged in successfully" });
 };
 exports.RegisterUser = async (req, res) => {
     let user = await User.findOne({ email: req.body.email });
     if (user) return res.status(400).send(" User with this email exist... ");
 
-    const { FirstName, LastName, email, password , phonenumber } = req.body;
+    const { FirstName, LastName, email, password , phonenumber, taxiType, accountType  } = req.body;
 
     user = new User({
         FirstName: FirstName,
         LastName: LastName,
         email: email,
         password: password,
-        phonenumber: phonenumber 
+        phonenumber: phonenumber,
+        taxiType: taxiType,
+        accountType: accountType
         
     });
     user.password = await bcryptjs.hash(user.password, 10);
     user = await user.save();
     const token = genAuthToken(user);
-    res.send(token);
+    res.status(201).json({ token,
+        _id: user.id,
+        email: user.email,
+        message: "Registration successful",
+    })
 };
 exports.Bookride = async (req, res) => {
     const {driverId, passengerId, origin, destination} = req.body

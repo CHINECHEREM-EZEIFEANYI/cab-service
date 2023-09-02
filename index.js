@@ -4,13 +4,13 @@ const bcryptjs = require('bcryptjs')
 const { connectDB } = require('./src/config/database.js')
 const app = express();
 const bodyParser = require("body-parser");
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 8000;
 const session = require("express-session");
 const { v4: uuidv4 } = require("uuid");
 const morgan = require('morgan');
 const crypto = require('crypto');
 const secretKey = crypto.randomBytes(32).toString('hex');
-console.log(secretKey);
+// console.log(secretKey);
 
 
 
