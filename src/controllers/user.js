@@ -35,6 +35,9 @@ function sendEmail(email, token) {
 
 exports.LoginUser = async (req, res) => {
     const { email, password } = req.body;
+    if (!email || !password) {
+        res.status(400).json({ message: "All fields are required" });
+    }
     let user = await User.findOne({ email: email });
     if (!user) return res.status(400).send(" Invalid Email or Password ");
     const isValid = await bcryptjs.compare(password, user.password);
@@ -46,7 +49,40 @@ exports.RegisterUser = async (req, res) => {
     let user = await User.findOne({ email: req.body.email });
     if (user) return res.status(400).send(" User with this email exist... ");
 
-    const { FirstName, LastName, email, password , phonenumber, taxiType, accountType  } = req.body;
+    const { FirstName, LastName, email, password, phonenumber, taxiType, accountType, licenseNumber } = req.body;
+    if (accountType === "driver") {
+        if (!email || !password || !LastName || !FirstName || !licenseNumber) {
+            res.status(400).json({ message: "All fields are required"});
+        }
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
+            res.status(400).json({ message: "User already exists"});
+        }
+        if (!licenseNumber) {
+            res.status(400).json({ message: "License number is required for drivers"});
+        }
+        const islicenseNumber = await User.findOne({ licenseNumber });
+        if (islicenseNumber) {
+            res.status(400).json({ message: "User with this license number already exists"});
+        }
+        const driverDetails = {
+            email,
+            password,
+            accountType,
+            LastName,
+            FirstName,
+            taxiType,
+            licenseNumber,
+            isAvailable: false,
+            rating: 0,
+        };
+        addDetailsToDatabase(driverDetails);
+    } 
+
+
+
+
+
 
     user = new User({
         FirstName: FirstName,
@@ -55,7 +91,8 @@ exports.RegisterUser = async (req, res) => {
         password: password,
         phonenumber: phonenumber,
         taxiType: taxiType,
-        accountType: accountType
+        accountType: accountType,
+        licenseNumber: licenseNumber
         
     });
     user.password = await bcryptjs.hash(user.password, 10);

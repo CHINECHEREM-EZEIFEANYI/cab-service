@@ -1,5 +1,6 @@
 const express = require('express');
 const bodyParser = require('body-parser');
+const express = require("express");
 const urouter = express.Router();
 
 const { LoginUser, RegisterUser, ResetPassword, UpdatePassword } = require("../controllers/user")
@@ -7,13 +8,9 @@ const { LoginUser, RegisterUser, ResetPassword, UpdatePassword } = require("../c
 
 
 urouter.get("/dashboard",);
-
 urouter.post("/register", RegisterUser);
 urouter.post("/login", LoginUser);
-// Endpoint for retrieving details of a specific booking
 urouter.get('/booking/:id',);
-
-//reset password routes
 urouter.get("/passwordreset", ResetPassword)
 urouter.get("/logout",)
 urouter.post("/passwordreset", ResetPassword)
