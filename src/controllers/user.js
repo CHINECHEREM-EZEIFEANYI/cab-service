@@ -46,10 +46,11 @@ exports.LoginUser = async (req, res) => {
     res.status(201).json({ token, _id: user.id, email: email, message : "Logged in successfully" });
 };
 exports.RegisterUser = async (req, res) => {
-    let user = await User.findOne({ email: req.body.email });
-    if (user) return res.status(400).send(" User with this email exist... ");
-
     const { FirstName, LastName, email, password, phonenumber, taxiType, accountType, licenseNumber } = req.body;
+    let user = await User.findOne({ email: req.body.email });
+    if (user) { return res.status(400).send(" User with this email exist... "); }
+
+    
     if (accountType === "driver") {
         if (!email || !password || !LastName || !FirstName || !licenseNumber) {
             res.status(400).json({ message: "All fields are required"});
