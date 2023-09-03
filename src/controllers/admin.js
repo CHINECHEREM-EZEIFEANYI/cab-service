@@ -64,12 +64,4 @@ exports.getUser = async (req, res) => {
     }
 };
 
-exports.getBookings = async function (req, res) {
 
-    await User.find({}).toArray((err, bookings) => {
-        if (err) {
-            return res.status(500).json({ message: 'Error fetching bookings' });
-        }
-        return res.status(200).json(bookings);
-    })
-}

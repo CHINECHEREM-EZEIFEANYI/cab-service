@@ -45,4 +45,93 @@ exports.getCab = async (req, res) => {
     }
 };
 
+exports.CancelRide = async (req, res) => {
+    const { email, password, rideId } = req.body;
+
+    try {
+        const user = await User.findOne({ email: email });
+
+        if (!user) {
+            return res.status(400).send('Invalid Email or Password');
+        }
+
+        const isValid = await bcryptjs.compare(password, user.password);
+
+        if (!isValid) {
+            return res.status(400).send('Invalid Email or Password');
+        }
+        const token = genAuthToken(user);
+        const ride = await ride.findById(rideId);
+
+        if (!ride) {
+            return res.status(404).send('Ride not found');
+        }
+        // Cancel the ride
+        ride.status = 'cancelled';
+        await ride.save();
+
+        res.send(token);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('An error occurred while cancelling the ride');
+    }
+};
+
+// exports.Bookride = async (req, res) => {
+//     const { driverId, passengerId, origin, destination } = req.body
+//     try {
+//         const driver = await User.findById(driverId);
+//         const passenger = await User.findById(passengerId);
+//         if (!driver || !passenger) {
+//             return res.status(404).send('Driver or passenger not found');
+//         }
+
+//         const newRide = new ride({
+//             driver: driverId,
+//             passenger: passengerId,
+//             origin,
+//             destination
+//         });
+//         await newRide.save();
+//         res.status(201).send('Ride booked successfully');
+//     } catch (error) {
+//         console.error(error);
+//         res.status(500).send('An error occurred while booking the ride');
+//     }
+// }
+exports.RateRide = async (req, res) => {
+    const { email, password, rideId, stars, feedback } = req.body;
+
+    try {
+        const user = await User.findOne({ email: email });
+
+        if (!user) {
+            return res.status(400).send('Invalid Email or Password');
+        }
+
+        const isValid = await bcryptjs.compare(password, user.password);
+
+        if (!isValid) {
+            return res.status(400).send('Invalid Email or Password');
+        }
+        const token = genAuthToken(user);
+
+        const ride = await ride.findById(rideId);
+
+        if (!ride) {
+            return res.status(404).send('Ride not found');
+        }
+
+        ride.stars = stars;
+        ride.feedback = feedback;
+        await ride.save();
+
+        res.send(token);
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('An error occurred while rating the ride');
+    }
+};
+
+
 
