@@ -50,21 +50,16 @@ exports.RegisterUser = async (req, res) => {
     let user = await User.findOne({ email: req.body.email });
     if (user) { return res.status(400).send(" User with this email exist... "); }
 
-    
     if (accountType === "driver") {
         if (!email || !password || !LastName || !FirstName || !licenseNumber) {
-            res.status(400).json({ message: "All fields are required"});
-        }
-        const existingUser = await User.findOne({ email });
-        if (existingUser) {
-            res.status(400).json({ message: "User already exists"});
+            res.status(400).json({ message: "All fields are required" });
         }
         if (!licenseNumber) {
-            res.status(400).json({ message: "License number is required for drivers"});
+            res.status(400).json({ message: "License number is required for drivers" });
         }
         const islicenseNumber = await User.findOne({ licenseNumber });
         if (islicenseNumber) {
-            res.status(400).json({ message: "User with this license number already exists"});
+            res.status(400).json({ message: "User with this license number already exists" });
         }
         const driverDetails = {
             email,
@@ -77,34 +72,36 @@ exports.RegisterUser = async (req, res) => {
             isAvailable: false,
             rating: 0,
         };
-        addDetailsToDatabase(driverDetails);
-    } 
-
-
-
-
-
-
-    user = new User({
-        FirstName: FirstName,
-        LastName: LastName,
-        email: email,
-        password: password,
-        phonenumber: phonenumber,
-        taxiType: taxiType,
-        accountType: accountType,
-        licenseNumber: licenseNumber
-        
-    });
-    user.password = await bcryptjs.hash(user.password, 10);
-    user = await user.save();
-    const token = genAuthToken(user);
-    res.status(201).json({ token,
-        _id: user.id,
-        email: user.email,
-        message: "Registration successful",
-    })
-};
+        user.password = await bcryptjs.hash(user.password, 10);
+        const user = await User.create(driverDetails);
+        if (user) {
+            res.status(201).json({ _id: user.id, email: user.email, licenseNumber: user.licenseNumber, message: "Registration successful" });
+        } else {
+            res.status(400).json({ error: "Could not register user" });
+        }
+    } else if (accountType === "passenger") {
+        if (!email || !password || !FirstName || !LastName) {
+            res.status(400).json({ message: "All fields are required" });
+        }
+        const passengerDetails = {
+            email,
+            password,
+            accountType,
+            LastName,
+            FirstName,
+        }
+        user.password = await bcryptjs.hash(user.password, 10);
+        const user = await User.create(passengerDetails);
+        if (user) {
+            res.status(201).json({ _id: user.id, email: user.email, message: "Registration successful" });
+        } else {
+            res.status(400).json({ error: "Could not register user" });
+        }
+    } else {
+        res.status(400);
+        throw new Error("invalid account type");
+    };
+}
 exports.ResetPassword = async (req, res) => {
     const email = req.body.email
     const existingUser = await User.findOne({ email })
