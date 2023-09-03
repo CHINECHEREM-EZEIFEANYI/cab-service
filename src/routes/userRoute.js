@@ -1,8 +1,5 @@
 const express = require('express');
-const bodyParser = require('body-parser');
-const express = require("express");
 const urouter = express.Router();
-
 const { LoginUser, RegisterUser, ResetPassword, UpdatePassword } = require("../controllers/user")
 
 
