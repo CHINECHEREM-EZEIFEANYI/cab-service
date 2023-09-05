@@ -1,70 +1,61 @@
-const { Ride } = require('../schema/rideSchema.js');
+//const { Ride } = require('../schema/rideSchema.js');
+const Ride = require ('../schema/rideSchema.js')
+const bookingStatus = require("../config/enum.js")
 const { v4: uuidv4 } = require("uuid")
-const id = uuidv4();
-console.log(id);
+const bcryptjs = require('bcryptjs')
 
 exports.getCab = async (req, res) => {
-
+   
+        const { passenger, driver, pickUpLocation, destination, amount, travelDate, bookingStatus, email, journeyStatus, review, rating } = req.body;
     try {
-        // Check if booking is available
-        const existingBooking = await Ride.findOne({ bookingId: id });
+        const newBookingId = uuidv4();
+        const existingBooking = await Ride.findOne({ bookingId : newBookingId });
 
         if (existingBooking) {
-            res.status(400).json({ error: "Booking is already made" });
-            return;
+            return res.status(400).json({ error: "Booking is already made" });
         }
-
-       
-        // Create a new booking
-        const {
-            passenger, driver, pickUpLocation, destination, amount, travelDate,  bookingStatus,  journeyStatus, review, ratingd } = req.body;
 
         const newRide = await Ride.create({
-            passenger,
-            driver,
-            pickUpLocation,
-            destination,
-            amount,
-            travelDate,
-            bookingStatus,
-            journeyStatus,
-            review,
-            rating,
-            bookingId : id
+            passenger, driver, pickUpLocation,
+            destination, amount, travelDate,
+            bookingStatus, email, journeyStatus, review, rating,
+            bookingId: newBookingId,
         });
 
-
         if (!newRide) {
-            res.status(500).json({ error: "Error trying to book cab" });
-            return;
+            return res.status(500).json({ error: "Error trying to book cab" });
         }
 
-        res.status(201).json(newRide);
+        return res.status(201).json(newRide);
     } catch (error) {
-        res.status(500).json({ error: "Internal Server Errorsss" });
+        console.error(error);
+        return res.status(500).json({ error: "Internal Server Error" });
     }
 };
 
+
 exports.CancelRide = async (req, res) => {
-    const { email, password, rideId } = req.body;
+    const { email, password, bookingId } = req.body;
 
     try {
-        const user = await User.findOne({ email: email });
+        const user = await Ride.findOne({ email: email });
 
         if (!user) {
-            return res.status(400).send('Invalid Email or Password');
+            return res.status(400).send('User not found. Please check your email.');
         }
-
+        if (!password) {
+            return res.status(400).send('Invalid Password'); // Or handle the error accordingly
+        }
         const isValid = await bcryptjs.compare(password, user.password);
 
         if (!isValid) {
-            return res.status(400).send('Invalid Email or Password');
+            return res.status(400).send('Incorrect password. Please verify your password.');
         }
         const token = genAuthToken(user);
-        const ride = await ride.findById(rideId);
+        const ride = await Ride.findById(bookingId);
 
         if (!ride) {
-            return res.status(404).send('Ride not found');
+            return res.status(404).send('Ride not found. Please provide a valid booking ID.');
         }
         // Cancel the ride
         ride.status = 'cancelled';
@@ -72,41 +63,20 @@ exports.CancelRide = async (req, res) => {
 
         res.send(token);
     } catch (error) {
-        console.error(error);
-        res.status(500).send('An error occurred while cancelling the ride');
+        console.error('Error:', error);
+        res.status(500).send('An error occurred while cancelling the ride. Please try again later.');
     }
 };
 
-// exports.Bookride = async (req, res) => {
-//     const { driverId, passengerId, origin, destination } = req.body
-//     try {
-//         const driver = await User.findById(driverId);
-//         const passenger = await User.findById(passengerId);
-//         if (!driver || !passenger) {
-//             return res.status(404).send('Driver or passenger not found');
-//         }
 
-//         const newRide = new ride({
-//             driver: driverId,
-//             passenger: passengerId,
-//             origin,
-//             destination
-//         });
-//         await newRide.save();
-//         res.status(201).send('Ride booked successfully');
-//     } catch (error) {
-//         console.error(error);
-//         res.status(500).send('An error occurred while booking the ride');
-//     }
-// }
 exports.RateRide = async (req, res) => {
     const { email, password, rideId, stars, feedback } = req.body;
 
     try {
-        const user = await User.findOne({ email: email });
+        const user = await Ride.findOne({ email: email });
 
         if (!user) {
-            return res.status(400).send('Invalid Email or Password');
+            return res.status(400).send('Email not found');
         }
 
         const isValid = await bcryptjs.compare(password, user.password);

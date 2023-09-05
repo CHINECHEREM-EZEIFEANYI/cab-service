@@ -4,7 +4,7 @@ const bcryptjs = require('bcryptjs')
 const { connectDB } = require('./src/config/database.js')
 const app = express();
 const bodyParser = require("body-parser");
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 8000;
 const session = require("express-session");
 const { v4: uuidv4 } = require("uuid");
 const morgan = require('morgan');
@@ -31,7 +31,7 @@ app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 app.use("/api/admin", require("./src/routes/adminRoute"));
-app.use("/api/driver", require("./src/routes/rideRoute.js"));
+app.use("/api/ride", require("./src/routes/rideRoute.js"));
 app.use("/api/users", require("./src/routes/userRoute.js"));
 
 const url = process.env.DB_URL;

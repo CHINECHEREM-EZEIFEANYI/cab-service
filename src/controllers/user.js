@@ -47,61 +47,85 @@ exports.LoginUser = async (req, res) => {
 };
 exports.RegisterUser = async (req, res) => {
     const { FirstName, LastName, email, password, phonenumber, taxiType, accountType, licenseNumber } = req.body;
-    let user = await User.findOne({ email: req.body.email });
-    if (user) { return res.status(400).send(" User with this email exist... "); }
 
-    if (accountType === "driver") {
-        if (!email || !password || !LastName || !FirstName || !licenseNumber) {
-            res.status(400).json({ message: "All fields are required" });
-        }
-        if (!licenseNumber) {
-            res.status(400).json({ message: "License number is required for drivers" });
-        }
-        const islicenseNumber = await User.findOne({ licenseNumber });
-        if (islicenseNumber) {
-            res.status(400).json({ message: "User with this license number already exists" });
-        }
-        const driverDetails = {
-            email,
-            password,
-            accountType,
-            LastName,
-            FirstName,
-            taxiType,
-            licenseNumber,
-            isAvailable: false,
-            rating: 0,
-        };
-        user.password = await bcryptjs.hash(user.password, 10);
-        const user = await User.create(driverDetails);
+    try {
+        let user = await User.findOne({ email });
+
         if (user) {
-            res.status(201).json({ _id: user.id, email: user.email, licenseNumber: user.licenseNumber, message: "Registration successful" });
+            return res.status(400).json({ message: "User with this email already exists" });
+        }
+
+        if (accountType === "driver") {
+            if (!email || !password || !LastName || !FirstName || !licenseNumber || !taxiType) {
+                return res.status(400).json({ message: "All fields are required" });
+            }
+
+            const isLicenseNumber = await User.findOne({ licenseNumber });
+
+            if (isLicenseNumber) {
+                return res.status(400).json({ message: "User with this license number already exists" });
+            }
+
+            const driverDetails = {
+                email,
+                password,
+                accountType,
+                LastName,
+                FirstName,
+                taxiType,
+                licenseNumber,
+                isAvailable: false,
+                rating: 0,
+            };
+
+            driverDetails.password = await bcryptjs.hash(driverDetails.password, 10);
+            user = await User.create(driverDetails);
+
+            if (user) {
+                return res.status(201).json({
+                    _id: user.id,
+                    email: user.email,
+                    licenseNumber: user.licenseNumber,
+                    message: "Registration successful",
+                });
+            } else {
+                return res.status(400).json({ error: "Could not register user" });
+            }
+        } else if (accountType === "passenger") {
+            if (!email || !password || !FirstName || !LastName) {
+                return res.status(400).json({ message: "All fields are required" });
+            }
+
+            const passengerDetails = {
+                email,
+                password,
+                accountType,
+                LastName,
+                FirstName,
+                phonenumber,
+            };
+
+            passengerDetails.password = await bcryptjs.hash(passengerDetails.password, 10);
+            user = await User.create(passengerDetails);
+
+            if (user) {
+                return res.status(201).json({
+                    _id: user.id,
+                    email: user.email,
+                    message: "Registration successful",
+                });
+            } else {
+                return res.status(400).json({ error: "Could not register user" });
+            }
         } else {
-            res.status(400).json({ error: "Could not register user" });
+            return res.status(400).json({ message: "Invalid account type" });
         }
-    } else if (accountType === "passenger") {
-        if (!email || !password || !FirstName || !LastName) {
-            res.status(400).json({ message: "All fields are required" });
-        }
-        const passengerDetails = {
-            email,
-            password,
-            accountType,
-            LastName,
-            FirstName,
-        }
-        user.password = await bcryptjs.hash(user.password, 10);
-        const user = await User.create(passengerDetails);
-        if (user) {
-            res.status(201).json({ _id: user.id, email: user.email, message: "Registration successful" });
-        } else {
-            res.status(400).json({ error: "Could not register user" });
-        }
-    } else {
-        res.status(400);
-        throw new Error("invalid account type");
-    };
-}
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ error: "Internal Server Error" });
+    }
+};
+
 exports.ResetPassword = async (req, res) => {
     const email = req.body.email
     const existingUser = await User.findOne({ email })
