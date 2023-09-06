@@ -10,7 +10,7 @@ urouter.post("/login", LoginUser);
 urouter.get('/booking/:id',);
 urouter.get("/passwordreset", ResetPassword)
 urouter.get("/logout",)
-urouter.post("/passwordreset", ResetPassword)
+urouter.post("/newpasswordpage", ResetPassword)
 urouter.post ("/updatepassord", UpdatePassword)
 
 

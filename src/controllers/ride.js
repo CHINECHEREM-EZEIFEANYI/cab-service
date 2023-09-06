@@ -43,9 +43,11 @@ exports.CancelRide = async (req, res) => {
         if (!user) {
             return res.status(400).send('User not found. Please check your email.');
         }
+
         if (!password) {
-            return res.status(400).send('Invalid Password'); // Or handle the error accordingly
+            return res.status(400).send('Invalid Password');
         }
+
         const isValid = await bcryptjs.compare(password, user.password);
 
         if (!isValid) {
