@@ -39,7 +39,7 @@ exports.LoginUser = async (req, res) => {
         res.status(400).json({ message: "All fields are required" });
     }
     let user = await User.findOne({ email: email });
-    if (!user) return res.status(400).send(" Invalid Email or Password ");
+    if (!user) return res.status(400).send(" Invalid Email ");
     const isValid = await bcryptjs.compare(password, user.password);
     if (!isValid) return res.status(400).send(" Invalid Email or Password ");
     const token = genAuthToken(user);

@@ -1,13 +1,16 @@
 //const { Ride } = require('../schema/rideSchema.js');
 const Ride = require ('../schema/rideSchema.js')
-const bookingStatus = require("../config/enum.js")
+const User = require('../schema/driver-schema.js')
 const { v4: uuidv4 } = require("uuid")
 const bcryptjs = require('bcryptjs')
+const genAuthToken = require("../utils/genAuthToken")
 
 exports.getCab = async (req, res) => {
    
-        const { passenger, driver, pickUpLocation, destination, amount, travelDate, bookingStatus, email, journeyStatus, review, rating } = req.body;
+        const { passenger, driver, pickUpLocation, destination, amount, travelDate, bookingStatus, email, journeyStatus, review,} = req.body;
     try {
+        let user = await User.findOne({ email: email });
+        if (!user) return res.status(400).send(" Invalid Email ");
         const newBookingId = uuidv4();
         const existingBooking = await Ride.findOne({ bookingId : newBookingId });
 
@@ -18,7 +21,7 @@ exports.getCab = async (req, res) => {
         const newRide = await Ride.create({
             passenger, driver, pickUpLocation,
             destination, amount, travelDate,
-            bookingStatus, email, journeyStatus, review, rating,
+            bookingStatus, email, journeyStatus, review,
             bookingId: newBookingId,
         });
 
@@ -35,10 +38,10 @@ exports.getCab = async (req, res) => {
 
 
 exports.CancelRide = async (req, res) => {
-    const { email, password, bookingId } = req.body;
+    const { email, password, id } = req.body;
 
     try {
-        const user = await Ride.findOne({ email: email });
+        const user = await User.findOne({ email: email });
 
         if (!user) {
             return res.status(400).send('User not found. Please check your email.');
@@ -54,7 +57,7 @@ exports.CancelRide = async (req, res) => {
             return res.status(400).send('Incorrect password. Please verify your password.');
         }
         const token = genAuthToken(user);
-        const ride = await Ride.findById(bookingId);
+        const ride = await Ride.findById(id);
 
         if (!ride) {
             return res.status(404).send('Ride not found. Please provide a valid booking ID.');
@@ -63,7 +66,7 @@ exports.CancelRide = async (req, res) => {
         ride.status = 'cancelled';
         await ride.save();
 
-        res.send(token);
+        res.send({ token , message : "Ride cancelled successfully"});
     } catch (error) {
         console.error('Error:', error);
         res.status(500).send('An error occurred while cancelling the ride. Please try again later.');
@@ -72,10 +75,10 @@ exports.CancelRide = async (req, res) => {
 
 
 exports.RateRide = async (req, res) => {
-    const { email, password, rideId, stars, feedback } = req.body;
+    const { email, password, id, stars, feedback } = req.body;
 
     try {
-        const user = await Ride.findOne({ email: email });
+        const user = await User.findOne({ email: email });
 
         if (!user) {
             return res.status(400).send('Email not found');
@@ -88,7 +91,7 @@ exports.RateRide = async (req, res) => {
         }
         const token = genAuthToken(user);
 
-        const ride = await ride.findById(rideId);
+        const ride = await Ride.findById(id);
 
         if (!ride) {
             return res.status(404).send('Ride not found');
@@ -97,8 +100,13 @@ exports.RateRide = async (req, res) => {
         ride.stars = stars;
         ride.feedback = feedback;
         await ride.save();
+        const response = {
+            token: token,
+            ride: ride,
+            requestBody: req.body, 
+        };
 
-        res.send(token);
+        res.send(response)
     } catch (error) {
         console.error(error);
         res.status(500).send('An error occurred while rating the ride');

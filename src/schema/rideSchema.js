@@ -3,6 +3,7 @@ const { JourneyStatus } = require("../config/enum");
 const {User} = require ('./driver-schema')
 const rideSchema = new mongoose.Schema(
     {
+        _id: mongoose.Schema.Types.ObjectId,
         driver: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
         passenger: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
         pickupLocation: {
