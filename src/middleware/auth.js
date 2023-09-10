@@ -14,23 +14,19 @@ const auth = (req, res, next) => {
     }
 };
 
-const isUser = (req, res, next) => {
-    auth(req, res, () => {
-        if (req.user._id === req.params.id || req.user.isAdmin) {
-            next();
+function isAdmin (req, res, next) {
+    if (req.body && req.body.pin) {
+        const { pin } = req.body
+        const secretAdminkey = process.env.ADMIN_KEY
+        if (pin === secretAdminkey) {
+            next()
         } else {
-            res.status(403).send("Access denied, Not authorized");
+            return res.status(400).json({ message: "Invalid PIN" });
         }
-    });
-};
-
-const isAdmin = (req, res, next) => {
-    auth(req, res, () => {
-        if (req.user.isAdmin) {
-            next();
-        } else {
-            return res.status(403).send("Access denied, Not authorized");
-        }
-    });
-};
-module.exports = { isAdmin, auth, isUser };
+    } else {
+        return res.status(400).json({ message: "Missing PIN in the request body" });; // 'pin' property is missing
+    }
+}
+    
+    
+module.exports = { auth, isAdmin };

@@ -15,3 +15,13 @@ exports.JourneyStatus = {
     STARTED: "started",
     ENDED: "ended"
  }
+exports.isLicenseNumberValid = function (licenseNumber) {
+    const licenseNumberPattern = /^[A-Z]{2,3}-\d{3,4}-\[A-Z]{2,3} $/
+
+    if(licenseNumberPattern.test(licenseNumber)){
+    return true
+} else {
+    return false
+     }
+    
+ }

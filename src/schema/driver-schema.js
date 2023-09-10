@@ -2,9 +2,10 @@ const mongoose = require("mongoose");
 const { DriverStatus } = require("../config/enum");
 
 const userSchema = new mongoose.Schema({
-    accountType: {
+  accountType: {
       type: String,
-      required: [true, "account type is required"],
+    enum:  ['passenger', 'driver'],
+    required: [true, "account type is required"],
     },
   FirstName: {
     type: String,
