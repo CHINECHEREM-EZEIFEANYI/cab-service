@@ -2,15 +2,15 @@ const mongoose = require('mongoose');
 const { DriverStatus } = require('../config/enum');
 const User = require("../schema/driver-schema")
 const isLicenseNumberValid = require('../config/enum')
-const isAdmin = require('../middleware/auth')
+const { isAdmin } = require('../middleware/auth.js')
 
-exports.registerAdmin= async function (res, req) {
+exports.registerAdmin= async function (req, res) {
     const { userName, password, email, pin } = req.body
     if (!userName || !password || !email || !pin) {
         return res.status(400).json({ message: "Missing or incomplete data in the request body" });
     }
     if (!isAdmin(pin)) {
-        return res.status(403).json({ message: 'Invalid PIN' });
+        return res.status(403).json({ message: 'Invalid PINs' });
     } 
     const newAdmin = new User ({
         userName, password, email, role: 'admin'

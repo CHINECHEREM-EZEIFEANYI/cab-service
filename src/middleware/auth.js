@@ -1,4 +1,5 @@
-require("dotenv").config();
+
+require('dotenv').config()
 const jwt = require("jsonwebtoken");
 const auth = (req, res, next) => {
     const token = req.header("X-auth-token");
@@ -14,19 +15,34 @@ const auth = (req, res, next) => {
     }
 };
 
-function isAdmin (req, res, next) {
-    if (req.body && req.body.pin) {
-        const { pin } = req.body
-        const secretAdminkey = process.env.ADMIN_KEY
-        if (pin === secretAdminkey) {
-            next()
+function isAdmin(req, res, next) {
+    try {
+        if (req.body && req.body.pin) {
+            const { pin } = req.body;
+            const secretAdminKey = "Zeffy001234568jkO"; // You can use process.env.ADMIN_KEY here
+
+            if (pin === secretAdminKey) {
+                next();
+            } else {
+                return res.status(400).json({ message: "Invalid PIN" });
+            }
         } else {
-            return res.status(400).json({ message: "Invalid PIN" });
+            return res.status(400).json({ message: "Missing PIN in the request body" });
         }
-    } else {
-        return res.status(400).json({ message: "Missing PIN in the request body" });; // 'pin' property is missing
+    } catch (error) {
+        // Handle any exceptions that occur within the middleware here
+        console.error(error);
+        return res.status(500).json({ message: "Internal Server Error" });
     }
 }
+
+module.exports = isAdmin;
+
     
     
-module.exports = { auth, isAdmin };
+module.exports = {auth, isAdmin };
+
+
+
+
+
