@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const { DriverStatus } = require('../config/enum');
-const User = require("../schema/driver-schema")
+const Admin = require("../schema/admin-schema")
+const User = require ('../schema/driver-schema')
 const isLicenseNumberValid = require('../config/enum')
 const { isAdmin } = require('../middleware/auth.js')
 
@@ -9,15 +10,18 @@ exports.registerAdmin= async function (req, res) {
     if (!userName || !password || !email || !pin) {
         return res.status(400).json({ message: "Missing or incomplete data in the request body" });
     }
-    if (!isAdmin(pin)) {
-        return res.status(403).json({ message: 'Invalid PINs' });
+    let user = await User.findOne({ email: email });
+    if (user) return res.status(400).send("Email Already Exists");
+
+    if (!isAdmin) {
+        return res.status(403).json({  message: 'Invalid PINs' });
     } 
-    const newAdmin = new User ({
+    const newAdmin = new Admin ({
         userName, password, email, role: 'admin'
     })
     await newAdmin.save()
     if (newAdmin) {
-        res.status(201).json({ message: 'Admin account created successfully' });
+        res.status(201).json({ userName, email, message: 'Admin account created successfully' });
     }
     else {
         res.status(500).json({ message: 'Error creating admin account' });
@@ -41,7 +45,7 @@ exports.approvedDriver = async function (req, res) {
     }
 
     const driver = await User.updateOne({ _id: driverId }, { isDriverApproved: approved, driverStatus: status });
-    return res.status(200).json({ message: 'Driver added successfully' });
+    return res.status(200).json({ driver, message: 'Driver added successfully' });
 };
 
 exports.deleteDriver = async function (req, res) {

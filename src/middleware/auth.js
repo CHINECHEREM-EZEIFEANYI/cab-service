@@ -19,7 +19,7 @@ function isAdmin(req, res, next) {
     try {
         if (req.body && req.body.pin) {
             const { pin } = req.body;
-            const secretAdminKey = "Zeffy001234568jkO"; // You can use process.env.ADMIN_KEY here
+            const secretAdminKey = process.env.ADMIN_KEY 
 
             if (pin === secretAdminKey) {
                 next();
