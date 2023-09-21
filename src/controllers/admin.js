@@ -38,7 +38,7 @@ exports.approvedDriver = async function (req, res) {
 
     let status; 
 
-    if (approved && isLicenseNumberValid(licenseNumber) ) {
+    if (approved && isLicenseNumberValid ) {
         status = DriverStatus.APPROVED; 
     } else {
         status = DriverStatus.REJECTED; 
@@ -49,17 +49,17 @@ exports.approvedDriver = async function (req, res) {
 };
 
 exports.deleteDriver = async function (req, res) {
-    const driverId = req.params.driverId;
+    const driverId = req.body;
     const user = await User.findById(driverId);
     if (!user) {
         return res.status(500).json({ message: 'User Not Found' });
     }
     else {
-       User.deleteOne({ _id: driverId }, (err, result) => {
+        User.deleteOne({ _id: driverId }, (err) => {
             if (err) {
                 return res.status(500).json({ message: 'Error deleting driver' });
             }
-           return res.status(200).json({ message: 'Driver deleted successfully' });
+            return res.status(200).json({ message: 'Driver deleted successfully' });
             
         });
 }
