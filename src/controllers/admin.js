@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const { DriverStatus } = require('../config/enum');
+const {BookingStatus } = require('../config/enum');
 const Admin = require("../schema/admin-schema")
 const User = require ('../schema/driver-schema')
 const isLicenseNumberValid = require('../config/enum')
@@ -67,7 +68,7 @@ exports.deleteDriver = async function (req, res) {
 };
 exports.getAllBookedRides = async (req, res) => {
     try {
-        const bookedRides = await Ride.find({ bookingStatus: 'Accepted' });
+        const bookedRides = await Ride.find({ bookingStatus: BookingStatus.ACCEPTED });
         res.status(200).json(bookedRides);
     } catch (error) {
         res.status(500).json({message: "Error Retrieving The Booked Rides"});
@@ -88,5 +89,4 @@ exports.getUser = async (req, res) => {
         res.status(500).send(err);
     }
 };
-
 

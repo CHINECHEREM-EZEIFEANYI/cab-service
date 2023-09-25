@@ -1,9 +1,8 @@
 const mongoose = require("mongoose");
-const { JourneyStatus } = require("../config/enum");
+const { JourneyStatus, BookingStatus } = require("../config/enum");
 const {User} = require ('./driver-schema')
 const rideSchema = new mongoose.Schema(
     {
-        _id: mongoose.Schema.Types.ObjectId,
         driver: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
         passenger: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
         pickupLocation: {
@@ -26,13 +25,13 @@ const rideSchema = new mongoose.Schema(
         travelDate: { type: Date }, 
         bookingStatus: {
     type: String,
-    enum: {values: ['pending', 'accept', 'decline'], message: 'Status is required.'},
+            enum: Object.values(BookingStatus),
     trim: true
   },
         journeyStatus: {
             type: String, enum: Object.values(JourneyStatus)
         },
-        rating: { type: Number, required: true,  min: 0, max: 5 },
+        rating: { type: Number, required: false,  min: 0, max: 5 },
         bookingId: { type: String, unique: true, required: true,  }
     },
     {

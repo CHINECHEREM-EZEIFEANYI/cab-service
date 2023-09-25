@@ -6,9 +6,9 @@ const { approvedDriver, deleteDriver, getAllBookedRides, getUser, registerAdmin 
 
 adminrouter.post('/register', isAdmin, registerAdmin);
 adminrouter.post('/new', approvedDriver);
-adminrouter.delete('/delete/:id', deleteDriver)
-adminrouter.get('/getuser', getUser);
-adminrouter.get('/getuser', isAdmin, getAllBookedRides);
+adminrouter.delete('/delete', deleteDriver)
+adminrouter.get('/getuser/:id', getUser);
+adminrouter.get('/getusers', getAllBookedRides);
 
 
 module.exports = adminrouter

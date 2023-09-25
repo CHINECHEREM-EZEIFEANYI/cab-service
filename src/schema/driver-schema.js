@@ -34,7 +34,7 @@ const userSchema = new mongoose.Schema({
   },
   licenseNumber: {
     type: String,
-    unique: [true, "license number is already taken"],
+    unique: true, 
   },
   taxiType: {
     type: String,
