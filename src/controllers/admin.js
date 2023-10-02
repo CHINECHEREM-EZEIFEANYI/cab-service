@@ -2,7 +2,8 @@ const mongoose = require('mongoose');
 const { DriverStatus } = require('../config/enum');
 const {BookingStatus } = require('../config/enum');
 const Admin = require("../schema/admin-schema")
-const User = require ('../schema/driver-schema')
+const User = require('../schema/driver-schema')
+const Ride = require ('../schema/rideSchema')
 const isLicenseNumberValid = require('../config/enum')
 const { isAdmin } = require('../middleware/auth.js')
 
@@ -69,11 +70,29 @@ exports.deleteDriver = async function (req, res) {
 exports.getAllBookedRides = async (req, res) => {
     try {
         const bookedRides = await Ride.find({ bookingStatus: BookingStatus.ACCEPTED });
+
+        if (!bookedRides || bookedRides.length === 0) {
+            return res.status(404).json({ message: "No booked rides found." });
+        }
+
         res.status(200).json(bookedRides);
     } catch (error) {
-        res.status(500).json({message: "Error Retrieving The Booked Rides"});
+        console.error("Error retrieving booked rides:", error);
+
+        if (error instanceof DatabaseError) {
+            return res.status(500).json({ message: "Database error occurred." });
+        }
+
+        if (error instanceof NetworkError) {
+            return res.status(500).json({ message: "Network error occurred." });
+        }
+
+        // Handle other specific error types here...
+
+        res.status(500).json({ message: "Unknown error occurred." });
     }
 };
+
 exports.getUser = async (req, res) => {
     try {
         const user = await User.findById(req.params.id);

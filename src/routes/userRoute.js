@@ -8,7 +8,7 @@ urouter.get("/dashboard",);
 urouter.post("/register", RegisterUser);
 urouter.post("/login", LoginUser);
 urouter.get('/booking/:id',);
-urouter.get("/passwordreset", ResetPassword)
+urouter.post("/passwordreset", ResetPassword)
 urouter.get("/logout",)
 urouter.post("/newpasswordpage", ResetPassword)
 urouter.post ("/updatepassord", UpdatePassword)
