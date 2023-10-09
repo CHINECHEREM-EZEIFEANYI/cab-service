@@ -2,9 +2,9 @@ require ('dotenv').config()
 const express = require("express");
 const { connectDB } = require('./src/config/database.js')
 const app = express();
-const bodyParser = require("body-parser");
 const port = process.env.PORT || 8000;
 const session = require("express-session");
+const flash = require('express-flash');
 const { v4: uuidv4 } = require("uuid");
 const morgan = require('morgan');
 const crypto = require('crypto');
@@ -22,7 +22,7 @@ app.use(
     saveUninitialized: true,
   })
 );
-
+app.use(flash());
 app.use(express.json());
 app.use(morgan('tiny'))
 app.get("/", (req, res) => {

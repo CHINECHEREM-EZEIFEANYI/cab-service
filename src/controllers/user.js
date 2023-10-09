@@ -5,15 +5,15 @@ const bcryptjs = require('bcryptjs')
 const genAuthToken = require("../utils/genAuthToken")
 const nodemailer = require ("nodemailer")
 
-function sendEmail(email, token) {
+function sendEmail(email, newPassword) {
   var email = email;
-  var token = token;
+  var newPassword = newPassword;
 
   var mail = nodemailer.createTransport({
     service: "gmail",
     auth: {
-      user: "mynodemailtestmail@gmail.com",
-      pass: "Nodemailer",
+        user: process.env.USER ,
+        pass: process.env.PASSWORD,
     },
   });
 
@@ -21,7 +21,7 @@ function sendEmail(email, token) {
     from: "mynodemailtestmail@gmail.com",
     to: email,
     subject: "Reset Password Link - SwiftRides.com",
-    text: `You requested a password reset. Please use the following link to reset your password: http://localhost:8000/api/users/newpasswordpage?token=${token}`,
+      text: `You requested a password reset. Please use the following link to reset your password: http://localhost:8000/api/users/inputpassword${newPassword}`,
   };
 
   mail.sendMail(mailOptions, (error, data) => {
@@ -131,75 +131,80 @@ exports.ResetPassword = async (req, res) => {
     const existingUser = await User.findOne({ email })
 
     if (existingUser) {
-        const token = randtoken.generate(20)
-        const sent = sendEmail(email, token)
+        //const token = randtoken.generate(20)
+        const newPassword = Math.floor(100000 + Math.random() * 900000).toString();
+        const hashedPassword = await bcryptjs.hash(newPassword, 10);
+        await User.updateOne({ email }, {
+            $set: {
+                password: hashedPassword,
+                resetToken: '', // Reset the token since the password has changed
+                resetTokenExpires: Date.now() + 600000, 
+            }
+        });
+        const sent = sendEmail(email, newPassword)
         if (sent !== "mailing error") {
-            const data = { token };
-            await User.updateOne({ email }, {
-                $set: {
-                    resetToken: data,
-                    resetTokenExpires: Date.now() + 600000,
-                }
-            });
+            
             req.flash("success_msg", "Your Password Reset link has been sent to your email");
         } else {
             req.flash("error", "Something went wrong, please try again");
         }
     } else {
         res.status(400).send(" Invalid Email")
+
         req.flash("error", "Email doesn't exist");
     }
 }
 exports.UpdatePassword = async (req, res) => {
-    const { token, password, password2 } = req.body;
-    console.log({
-        token,
-        password,
-        password2,
-    });
+    const { email, password, newPassword } = req.body;
 
-    let errors = [];
-
-    if (!password || !password2) {
-        errors.push({ message: "please enter all fields" });
-    }
-    if (!token) {
-        errors.push({
-            message:
-                "no token found/ token expired, click on the forgot password link sent to your mail if registered",
-        });
-    }
-
-    if (password.length < 6) {
-        errors.push({ message: "password should be atleast 6 characters" });
-    }
-    if (password != password2) {
-        errors.push({ message: " passwords do not match" });
-    }
-    if (errors.length > 0) {
-        res.status(400).json({ message: { errors } })
-    } else {
-        const info = { token: token }
-    } const user = await user.findOne({ token: info.token })
-    if (user) {
+    try {
+        const user = await User.findOne({ email });
+        console.log ("This User : ", user)
+        if (!user) {
+            return res.status(400).json({ message: "User not found." });
+        }
+        console.log("Current password from the database:", user.password);
+        console.log("Current password from the request:", password);
         const hashedPassword = await bcryptjs.hash(password, 10);
-        await user.updateOne({ _id: user.id },
+        const isPasswordValid = await bcryptjs.compare(password, user.password);
+        console.log("the valid password: ", isPasswordValid)
+        if (!isPasswordValid) {
+            return res.status(400).json({ message: "Invalid current password." });
+        }
+
+        if (newPassword.length < 6) {
+            return res.status(400).json({ message: "New password should be at least 6 characters." });
+        }
+
+      
+        await User.updateOne(
+            { _id: user._id },
             {
                 $set: {
                     password: hashedPassword,
-                    resetToken: token,
-                    resetTokenExpires: new Date(Date.now() + 300000), 
                 },
             }
-        )
+        );
+ 
         req.flash(
             "success_msg",
-            "Your Password has been changed successfully, now Login");
-        res.redirect("/newpasswordpage");
-    
+            "Your password has been changed successfully. You can now login with the new password."
+        );
+        return res.status(200).json({ message: "Password updated successfully." });
+    } catch (error) {
+        console.error("Error updating password:", error);
+        return res.status(500).json({ message: "Internal Server Error" });
     }
-    else {
-        console.log("Invalid token.");
-        req.flash("error", "Invalid link, please try again.");
+};
+
+exports.InputPassword = async (req, res) => {
+    const enteredCode = req.body.code;
+    const expectedCode = '696897'; 
+
+    if (enteredCode === expectedCode) {
+       res.redirect('/login');
+       // res.status(200).send('Oyah go back.');
+    } else {
+        res.status(400).send('Invalid code. Please try again.');
     }
 }

@@ -1,6 +1,6 @@
 const express = require('express');
 const urouter = express.Router();
-const { LoginUser, RegisterUser, ResetPassword, UpdatePassword } = require("../controllers/user")
+const { LoginUser, RegisterUser, ResetPassword, UpdatePassword , InputPassword} = require("../controllers/user")
 
 
 
@@ -9,9 +9,8 @@ urouter.post("/register", RegisterUser);
 urouter.post("/login", LoginUser);
 urouter.get('/booking/:id',);
 urouter.post("/passwordreset", ResetPassword)
+urouter.post("/updatepassord", UpdatePassword)
+urouter.post("/inputpassword", InputPassword)
 urouter.get("/logout",)
-urouter.post("/newpasswordpage", ResetPassword)
-urouter.post ("/updatepassord", UpdatePassword)
-
 
 module.exports = urouter
